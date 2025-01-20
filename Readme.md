@@ -19,3 +19,7 @@ Skill Development:
 Worked with geolocation and mapping APIs.
 
 Handled upload of multimedia and significant amounts of user data. Built a system that integrates social engagement with real-world impact. Interesting and Challenging: Technology combined with civic awareness; meaning that it was both meaningful as well as exciting to build.
+
+
+
+---------------
