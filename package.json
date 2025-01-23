@@ -1,8 +1,8 @@
-{
+w{
   "name": "s63_dirtiest_places_explorer",
   "version": "1.0.0",
   "description": "Project Title:-Dirtiest Places Explorer",
-  "main": "index.js",
+  "main": "server.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
