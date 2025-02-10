@@ -1,24 +1,49 @@
 const express = require("express");
-const mongoose = require("mongoose");
-const connectDatabase = require("./database");
+const cors = require("cors");
+const path = require("path");
+const fs = require("fs");
+const multer = require("multer");
+const mongoose = require("mongoose")
+const connectDB = require("./database"); // Import MongoDB connection
+const routes = require("./routes/routes"); // Import routes
 
 const app = express();
-connectDatabase();
+const PORT = process.env.PORT || 5000;
 
-app.get("/ping", (req, res) => {
-  try {
-    res.send("pong");
-  } catch (error) {
-    res.status(500).send("An error occurred");
+// Connect to MongoDB
+connectDB();
+
+// Middleware
+app.use(cors());
+app.use(express.json());
+app.use("/uploads", express.static("uploads"));
+
+// Ensure "uploads" directory exists
+if (!fs.existsSync("uploads")) {
+  fs.mkdirSync("uploads");
+}
+
+// Multer setup for file uploads
+const storage = multer.diskStorage({
+  destination: "uploads/",
+  filename: (req, file, cb) => {
+    cb(null, Date.now() + path.extname(file.originalname));
+  },
+});
+const upload = multer({ storage });
+
+// Use API Routes from `routes.js`
+app.use("/api", routes);
+
+// Handle File Upload Separately
+app.post("/api/upload", upload.single("image"), (req, res) => {
+  if (!req.file) {
+    return res.status(400).json({ error: "No file uploaded" });
   }
+  res.status(201).json({ imageUrl: `/uploads/${req.file.filename}` });
 });
 
-// *Add Home Route with DB Status*
-app.get("/", (req, res) => {
-  const status = mongoose.connection.readyState === 1 ? "Connected" : "Not Connected";
-  res.json({ message: "Welcome to the API", db_status: status });
-});
-
-app.listen(8000, () => {
-  console.log(`Server is running on port http://localhost:8000`);
+// Start Server
+app.listen(PORT, () => {
+  console.log(`Server running on port ${PORT}`);
 });
