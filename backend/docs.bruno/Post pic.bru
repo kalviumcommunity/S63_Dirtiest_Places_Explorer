@@ -1,0 +1,22 @@
+meta {
+  name: Post pic
+  type: http
+  seq: 3
+}
+
+post {
+  url: http://localhost:8000/api/reports
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "description": "Garbage pileup near the main market",
+    "category": "Littered Streets",
+    "latitude": 12.9716,
+    "longitude": 77.5946,
+    "imageUrl": "http://localhost:8000/uploads/sample-image.jpg"
+  }
+  
+}
