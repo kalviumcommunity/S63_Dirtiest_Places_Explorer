@@ -1,0 +1,22 @@
+meta {
+  name: POST new
+  type: http
+  seq: 6
+}
+
+post {
+  url: http://localhost:8000/api/reports
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "description": "Overflowing garbage bins near the city park.",
+    "category": "Littered Streets",
+    "latitude": 40.7128,
+    "longitude": -74.0060,
+    "imageUrl": "http://localhost:8000/uploads/garbage-park.jpg"
+  }
+  
+}

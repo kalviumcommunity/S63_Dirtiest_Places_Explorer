@@ -5,7 +5,7 @@ const fs = require("fs");
 const multer = require("multer");
 const mongoose = require("mongoose")
 const connectDB = require("./database"); // Import MongoDB connection
-const routes = require("./routes/routes"); // Import routes
+const routes = require("./backend/routes/routes"); // Import routes
 
 const app = express();
 const PORT = process.env.PORT || 5000;
