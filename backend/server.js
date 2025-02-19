@@ -5,7 +5,7 @@ const fs = require("fs");
 const multer = require("multer");
 const mongoose = require("mongoose")
 const connectDB = require("./database"); // Import MongoDB connection
-const routes = require("./backend/routes/routes"); // Import routes
+
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -33,7 +33,7 @@ const storage = multer.diskStorage({
 const upload = multer({ storage });
 
 // Use API Routes from `routes.js`
-app.use("/api", routes);
+
 
 // Handle File Upload Separately
 app.post("/api/upload", upload.single("image"), (req, res) => {
