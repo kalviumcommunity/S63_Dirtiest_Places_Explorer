@@ -1,14 +1,25 @@
+import { useEffect, useState } from "react";
 import "./App.css";
-import PlaceCard from "./components/PlaceCard"; // Importing the component
+import PlaceCard from "./components/PlaceCard";
+import Signup from "./components/Signup";
 
 function App() {
-  const dummyPlace = {
-    title: "Garbage Dump at City Center",
-    image: "https://via.placeholder.com/300", 
-    description: "An overflowing garbage dump causing foul smell.",
-    location: "Bengaluru, India",
-    category: "Littered Streets"
-  };
+  const [showSignup, setShowSignup] = useState(false);
+  const [places, setPlaces] = useState([]);
+
+  useEffect(() => {
+    const fetchPlaces = async () => {
+      try {
+        const response = await fetch("https://s63-dirtiest-places-explorer-1.onrender.com/api/reports");
+        const data = await response.json();
+        setPlaces(data);
+      } catch (error) {
+        console.error("Error fetching places:", error);
+      }
+    };
+
+    fetchPlaces();
+  }, []);
 
   return (
     <div className="container">
@@ -25,11 +36,26 @@ function App() {
           />
           <p>Join us in making the world a cleaner place.</p>
         </section>
-        
-        {/* Render PlaceCard component */}
+
+        {/* Signup Section */}
+        {showSignup ? (
+          <Signup />
+        ) : (
+          <button className="signup-btn" onClick={() => setShowSignup(true)}>
+            Signup to Report
+          </button>
+        )}
+
+        {/* Display reported places dynamically */}
         <section className="places">
           <h2>Recently Reported Dirty Places</h2>
-          <PlaceCard place={dummyPlace} />
+          {places.length > 0 ? (
+            places.map((place) => (
+              <PlaceCard key={place._id} place={place} />
+            ))
+          ) : (
+            <p>No places reported yet.</p>
+          )}
         </section>
 
         <button className="report-btn">Report a Dirty Place</button>

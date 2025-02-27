@@ -1,42 +1,49 @@
-// server.js (Backend Setup)
+const express = require("express");
+const mongoose = require("mongoose");
+const cors = require("cors");
+const User = require("./models/user"); // Import User model
+require("dotenv").config(); // Load environment variables
+const schema = require("./models/schema"); // Import the schema
 
-const mongoose = require('mongoose');
-const cors = require('cors');
-const dotenv = require('dotenv');
-const express = require('express');
-const Report = require('./models/schema'); // Updated to use schema.js
+const router = require("./routers/routes"); // Fix import issue
 
-dotenv.config();
 const app = express();
-app.use(express.json());
-app.use(cors({ origin: 'https://jovial-bunny-8ba2b1.netlify.app' }));
 
-mongoose.connect(process.env.MONGO_URI, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true
-}).then(() => console.log('MongoDB connected'))
-  .catch(err => console.log(err));
+app.use(cors()); // Allow frontend access
+app.use(express.json()); // Parse JSON requests
 
-// API to fetch reported places
-app.get('/api/reports', async (req, res) => {
-    try {
-        const reports = await Report.find();
-        res.json(reports);
-    } catch (err) {
-        res.status(500).json({ message: 'Server Error' });
-    }
+const MONGO_URI = process.env.MONGO_URI;
+
+// Connect to MongoDB
+const connectDB = async () => {
+  try {
+    await mongoose.connect(MONGO_URI, {
+      useNewUrlParser: true,
+      useUnifiedTopology: true,
+    });
+    console.log("✅ MongoDB connected successfully");
+  } catch (error) {
+    console.error("❌ MongoDB connection error:", error);
+    process.exit(1);
+  }
+};
+
+// // Fetch all users
+app.get("/api/users", async (req, res) => {
+  try {
+    const users = await User.find();
+    res.json(users);
+  } catch (error) {
+    res.status(500).json({ message: "Error fetching users" });
+  }
 });
 
-// API to add a new report
-app.post('/api/reports', async (req, res) => {
-    try {
-        const newReport = new Report(req.body);
-        await newReport.save();
-        res.status(201).json(newReport);
-    } catch (err) {
-        res.status(500).json({ message: 'Failed to save report' });
-    }
-});
+// Use Routes
+app.use("/api", router); // Fixed: using `routes` instead of `authRoutes`
 
-const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+// Start the server after connecting to the database
+const PORT = process.env.PORT || 8000;
+
+connectDB().then(() => {
+  app.listen(PORT, () => console.log(`🚀 Server running on port ${PORT}`));
+});
