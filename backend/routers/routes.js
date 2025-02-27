@@ -1,6 +1,31 @@
 const express = require("express");
 const Report = require("../models/schema"); // Import the schema
 const router = express.Router();
+const User = require("../models/user");
+
+
+// Signup route
+router.post("/signup", async (req, res) => {
+  try {
+      const { name, email, password } = req.body;
+     console.log(name,email,password)
+      // Check if user already exists
+      const existingUser = await User.findOne({ email });
+      if (existingUser) {
+          return res.status(400).json({ message: "Email already in use" });
+      }
+
+      // Create new user (storing password as plain text)
+      const newUser = new User({ name, email, password });
+      await newUser.save();
+
+      res.status(201).json({ message: "User created successfully" });
+  } catch (error) {
+      console.error("Signup Error:", error);
+      res.status(500).json({ message: "Server error" });
+  }
+});
+
 
 // Create a new report
 router.post("/reports", async (req, res) => {
