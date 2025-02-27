@@ -1,49 +1,42 @@
-const express = require("express");
-const cors = require("cors");
-const path = require("path");
-const fs = require("fs");
-const multer = require("multer");
-const mongoose = require("mongoose")
-const connectDB = require("./database"); // Import MongoDB connection
+// server.js (Backend Setup)
 
+const mongoose = require('mongoose');
+const cors = require('cors');
+const dotenv = require('dotenv');
+const express = require('express');
+const Report = require('./models/schema'); // Updated to use schema.js
 
+dotenv.config();
 const app = express();
-const PORT = process.env.PORT || 5000;
-
-// Connect to MongoDB
-connectDB();
-
-// Middleware
-app.use(cors());
 app.use(express.json());
-app.use("/uploads", express.static("uploads"));
+app.use(cors({ origin: 'https://jovial-bunny-8ba2b1.netlify.app' }));
 
-// Ensure "uploads" directory exists
-if (!fs.existsSync("uploads")) {
-  fs.mkdirSync("uploads");
-}
+mongoose.connect(process.env.MONGO_URI, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true
+}).then(() => console.log('MongoDB connected'))
+  .catch(err => console.log(err));
 
-// Multer setup for file uploads
-const storage = multer.diskStorage({
-  destination: "uploads/",
-  filename: (req, file, cb) => {
-    cb(null, Date.now() + path.extname(file.originalname));
-  },
-});
-const upload = multer({ storage });
-
-// Use API Routes from `routes.js`
-
-
-// Handle File Upload Separately
-app.post("/api/upload", upload.single("image"), (req, res) => {
-  if (!req.file) {
-    return res.status(400).json({ error: "No file uploaded" });
-  }
-  res.status(201).json({ imageUrl: `/uploads/${req.file.filename}` });
+// API to fetch reported places
+app.get('/api/reports', async (req, res) => {
+    try {
+        const reports = await Report.find();
+        res.json(reports);
+    } catch (err) {
+        res.status(500).json({ message: 'Server Error' });
+    }
 });
 
-// Start Server
-app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`);
+// API to add a new report
+app.post('/api/reports', async (req, res) => {
+    try {
+        const newReport = new Report(req.body);
+        await newReport.save();
+        res.status(201).json(newReport);
+    } catch (err) {
+        res.status(500).json({ message: 'Failed to save report' });
+    }
 });
+
+const PORT = process.env.PORT || 5000;
+app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
