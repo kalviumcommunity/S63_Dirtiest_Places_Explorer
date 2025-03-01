@@ -1,73 +1,159 @@
-/* General Page Styling */
+/* 🎨 Root Variables - Vibrant Colors */
+:root {
+  --primary-color: #ffcc00; /* Bright Yellow */
+  --secondary-color: #ff007f; /* Hot Pink */
+  --accent-color: #00eaff; /* Neon Cyan */
+  --text-color: #f0f0f0; /* Light Gray for better readability */
+  --background-gradient: linear-gradient(135deg, #1a1a40, #3f0d75);
+  --glass-bg: rgba(255, 255, 255, 0.15);
+  --shadow: rgba(131, 17, 17, 0.4);
+}
+
+/* 🌌 Animated Background */
 body, html {
   margin: 0;
   padding: 0;
-  font-family: Arial, sans-serif;
-  background-color: #f4f4f4;
+  font-family: 'Poppins', sans-serif;
+  background: var(--background-gradient);
+  background-size: cover;
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 100vh; /* Full screen height */
+  min-height: 100vh;
+  transition: background 0.5s ease-in-out;
+  color: var(--text-color); /* Ensure all body text is light gray */
 }
 
-/* Container to Center Content */
+/* Center Container */
 .app-container {
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 100vh;
+  min-height: 100vh;
   width: 100%;
 }
 
-/* PlaceCard Styling */
-.place-card {
-  background: white;
-  border-radius: 10px;
-  box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.15);
-  padding: 16px;
-  width: 320px; /* Adjusted width */
-  text-align: center; /* Align text in center */
-  transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+/* 🏆 Heading Style - Neon Glow Effect */
+h1 {
+  font-size: 2.8rem;
+  color: var(--accent-color);
+  text-align: center;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  text-shadow: 0px 0px 10px rgba(0, 234, 255, 0.8), 0px 0px 20px rgba(0, 234, 255, 0.5);
 }
 
-.place-card:hover {
-  transform: scale(1.02);
-  box-shadow: 0px 6px 14px rgba(0, 0, 0, 0.2);
+/* 🏙️ Place Card - Glassmorphism Effect */
+.place-card {
+  background: var(--glass-bg);
+  border-radius: 15px;
+  box-shadow: 0px 10px 20px var(--shadow);
+  padding: 24px;
+  width: 360px;
+  text-align: center;
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+  animation: fadeIn 0.8s ease-in-out;
+  color: var(--text-color); /* Apply light text color inside card */
 }
 
 .place-card img {
   width: 100%;
-  height: 140px; /* Smaller image */
+  height: 220px;
   object-fit: cover;
-  border-radius: 6px;
+  border-radius: 12px;
+  transition: transform 0.3s ease-in-out;
 }
 
+.place-card:hover img {
+  transform: scale(1.05);
+}
+
+.place-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0px 15px 30px var(--shadow);
+}
 .place-card h2 {
-  font-size: 18px;
-  font-weight: bold;
-  color: #2E616B;
-  margin: 10px 0 5px;
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--primary-color);
+  margin: 14px 0 8px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  text-shadow: 0px 0px 12px rgba(255, 204, 0, 0.8);
 }
 
+/* 📝 Description - Softer for Readability */
 .place-card p {
   font-size: 14px;
-  color: #444;
-  margin-bottom: 6px;
+  color: var(--text-color);
+  margin-bottom: 10px;
 }
 
 .place-card .location {
-  font-size: 12px;
-  color: #31708E;
+  font-size: 14px;
+  color: var(--accent-color);
   font-weight: 600;
+  text-shadow: 0px 0px 10px rgba(0, 234, 255, 0.9);
 }
 
 .place-card .category {
   display: inline-block;
-  background: #ffeded;
-  color: #d9534f;
-  font-size: 12px;
-  padding: 5px 10px;
-  border-radius: 4px;
+  background: linear-gradient(135deg, var(--secondary-color), var(--primary-color));
+  color: #fff;
+  font-size: 14px;
+  padding: 10px 16px;
+  border-radius: 20px;
   font-weight: bold;
-  margin-top: 6px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  box-shadow: 0px 4px 12px rgba(255, 255, 255, 0.2);
+  transition: all 0.3s ease-in-out;
+}
+
+.place-card .category:hover {
+  transform: scale(1.12);
+  box-shadow: 0px 4px 18px rgba(255, 255, 255, 0.4);
+}
+
+/* 🚀 Button Styles - Neon Glow & Gradient */
+button {
+  background: linear-gradient(135deg, #ff007f, #ff9800);
+  color: white;
+  font-size: 16px;
+  font-weight: bold;
+  padding: 12px 18px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.3s ease-in-out;
+  box-shadow: 0px 4px 12px rgba(255, 255, 255, 0.1);
+  text-shadow: 0px 0px 8px rgba(255, 255, 255, 0.7);
+}
+
+button:hover {
+  transform: scale(1.05);
+  box-shadow: 0px 6px 16px rgba(255, 255, 255, 0.3);
+  background: linear-gradient(135deg, #ff9800, #ff007f);
+}
+
+/* 🌟 Fade In Animation */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* 📱 Responsive Design */
+@media (max-width: 600px) {
+  .place-card {
+    width: 90%;
+  }
 }
