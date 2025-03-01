@@ -20,7 +20,7 @@ const PlaceCard = ({ place }) => {
 const dummyPlace = {
   title: "Garbage Dump at City Center",
   image:
-    "https://www.hindustantimes.com/ht-img/img/2023/06/15/1600x900/A-view-of-the-garbage-dump-site-in-Ludhiana-on-Thu_1686851049492.jpg",
+    "https://thumbs.dreamstime.com/b/city-garbage-dump-official-village-86673675.jpg",
   description: "An overflowing garbage dump causing foul smell.",
   location: "Bengaluru, India",
   category: "Littered Streets",
