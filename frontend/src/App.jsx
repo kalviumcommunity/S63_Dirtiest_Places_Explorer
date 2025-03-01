@@ -2,15 +2,17 @@ import { useEffect, useState } from "react";
 import "./App.css";
 import PlaceCard from "./components/PlaceCard";
 import Signup from "./components/Signup";
+import AddEntity from "./components/AddEntity";  // Import AddEntity component
 
 function App() {
   const [showSignup, setShowSignup] = useState(false);
+  const [showAddEntity, setShowAddEntity] = useState(false); // State for AddEntity modal
   const [places, setPlaces] = useState([]);
 
   useEffect(() => {
     const fetchPlaces = async () => {
       try {
-        const response = await fetch("https://s63-dirtiest-places-explorer-1.onrender.com/api/reports");
+        const response = await fetch("http://localhost:8000/api/entities");
         const data = await response.json();
         setPlaces(data);
       } catch (error) {
@@ -20,6 +22,11 @@ function App() {
 
     fetchPlaces();
   }, []);
+
+  // Function to handle new entity addition
+  const handleNewEntity = (newEntity) => {
+    setPlaces([...places, newEntity]); // Update state dynamically
+  };
 
   return (
     <div className="container">
@@ -58,7 +65,20 @@ function App() {
           )}
         </section>
 
-        <button className="report-btn">Report a Dirty Place</button>
+        {/* Button to Show AddEntity Form */}
+        <button className="report-btn" onClick={() => setShowAddEntity(true)}>
+          Report a Dirty Place
+        </button>
+
+        {/* Show AddEntity Form When Button is Clicked */}
+        {showAddEntity && (
+          <div className="modal">
+            <div className="modal-content">
+              <button className="close-btn" onClick={() => setShowAddEntity(false)}>✖</button>
+              <AddEntity onNewEntity={handleNewEntity} />
+            </div>
+          </div>
+        )}
       </main>
       <footer>
         <p>© 2025 Dirtiest Places Explorer | Built for civic awareness</p>
