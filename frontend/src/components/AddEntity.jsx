@@ -9,7 +9,7 @@ const AddEntityForm = () => {
 
   // Fetch the updated list of places
   useEffect(() => {
-    fetch("http://localhost:5002/api/entities")
+    fetch("http://localhost:5003/api/entities")
       .then((res) => res.json())
       .then((data) => setPlaces(data))
       .catch((err) => console.error(err));
@@ -22,14 +22,14 @@ const AddEntityForm = () => {
 
 
 
-    await fetch("http://localhost:5002/api/entities", {
+    await fetch("http://localhost:5003/api/entities", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(newPlace),
     });
 
     // Refresh the list after submission
-    fetch("http://localhost:5002/api/entities")
+    fetch("http://localhost:5003/api/entities")
       .then((res) => res.json())
       .then((data) => setPlaces(data));
 

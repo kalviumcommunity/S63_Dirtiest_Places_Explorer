@@ -22,7 +22,7 @@ function Home() {
   const fetchPlaces = async () => {
     setLoading(true);
     try {
-      const response = await fetch("http://localhost:5002/api/entities");
+      const response = await fetch("http://localhost:5003/api/entities");
       const data = await response.json();
       setPlaces(data);
     } catch (error) {
@@ -41,7 +41,7 @@ function Home() {
 
   const handleDelete = async (id) => {
     try {
-      await fetch(`http://localhost:5002/api/entities/${id}`, { method: "DELETE" });
+      await fetch(`http://localhost:5003/api/entities/${id}`, { method: "DELETE" });
       setPlaces(places.filter(place => place._id !== id));
       showNotification("Place deleted successfully!");
     } catch (error) {
@@ -52,7 +52,7 @@ function Home() {
 
   const showNotification = (message) => {
     setNotification(message);
-    setTimeout(() => setNotification(null), 5002);
+    setTimeout(() => setNotification(null), 5003);
   };
 
   return (

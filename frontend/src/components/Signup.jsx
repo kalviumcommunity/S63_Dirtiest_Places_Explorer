@@ -41,7 +41,7 @@ function Signup() {
 
     try {
       // Mock API call - replace with your actual signup endpoint
-      // const response = await fetch("http://localhost:5002/api/signup", {
+      // const response = await fetch("http://localhost:5003/api/signup", {
       //   method: "POST",
       //   headers: {
       //     "Content-Type": "application/json",

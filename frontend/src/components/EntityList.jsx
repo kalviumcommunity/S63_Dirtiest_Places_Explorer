@@ -8,7 +8,7 @@ const EntityList = () => {
     useEffect(() => {
         const fetchEntities = async () => {
             try {
-                const response = await fetch('http://localhost:5002/api/entities');
+                const response = await fetch('http://localhost:5003/api/entities');
                 const data = await response.json();
                 setEntities(data);
             } catch (error) {
@@ -20,7 +20,7 @@ const EntityList = () => {
 
     const handleDelete = useCallback(async (id) => {
         try {
-            await fetch(`http://localhost:5002/api/entities/${id}`, { method: 'DELETE' });
+            await fetch(`http://localhost:5003/api/entities/${id}`, { method: 'DELETE' });
             setEntities(prevEntities => prevEntities.filter(entity => entity._id !== id));
         } catch (error) {
             console.error('Error deleting entity:', error);
