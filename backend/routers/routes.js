@@ -1,39 +1,56 @@
 const express = require("express");
+const bcrypt = require("bcryptjs"); // Secure password storage
 const Report = require("../models/schema"); // Report schema
 const User = require("../models/user"); // User schema
 const Entity = require("../models/entity"); // Entity schema
 const router = express.Router();
 
-// Signup route
+// Helper function for validation
+const validateFields = (fields) => {
+  return Object.values(fields).every(value => value && value.trim().length > 0);
+};
+
+// Signup route with password hashing
 router.post("/signup", async (req, res) => {
   try {
     const { name, email, password } = req.body;
-    console.log(name, email, password);
 
-    // Check if user already exists
-    const existingUser = await User.findOne({ email });
-    if (existingUser) {
-      return res.status(400).json({ message: "Email already in use" });
+    if (!validateFields({ name, email, password })) {
+      return res.status(400).json({ error: "All fields are required" });
     }
 
-    // Create new user (storing password as plain text)
-    const newUser = new User({ name, email, password });
+    if (!email.includes("@")) {
+      return res.status(400).json({ error: "Invalid email format" });
+    }
+
+    const existingUser = await User.findOne({ email });
+    if (existingUser) {
+      return res.status(400).json({ error: "Email already in use" });
+    }
+
+    // Hash password before saving
+    const hashedPassword = await bcrypt.hash(password, 10);
+    const newUser = new User({ name, email, password: hashedPassword });
     await newUser.save();
 
     res.status(201).json({ message: "User created successfully" });
   } catch (error) {
     console.error("Signup Error:", error);
-    res.status(500).json({ message: "Server error", error: error.message });
+    res.status(500).json({ error: "Server error", details: error.message });
   }
 });
 
-// Create a new report
+// Create a new report with validation
 router.post("/reports", async (req, res) => {
   try {
     const { description, category, latitude, longitude, imageUrl } = req.body;
 
-    if (!description || !category || !latitude || !longitude || !imageUrl) {
+    if (!validateFields({ description, category, latitude, longitude, imageUrl })) {
       return res.status(400).json({ error: "All fields are required" });
+    }
+
+    if (!imageUrl.startsWith("http")) {
+      return res.status(400).json({ error: "Invalid image URL" });
     }
 
     const newReport = new Report({
@@ -64,16 +81,26 @@ router.get("/reports", async (req, res) => {
 
 // CRUD Routes for Entities
 
-// Create a new entity
+// Create a new entity with validation
 router.post("/entities", async (req, res) => {
   try {
     const { name, description } = req.body;
-    if (!name || !description) {
+
+    if (!validateFields({ name, description })) {
       return res.status(400).json({ error: "Name and description are required" });
+    }
+
+    if (name.length < 3 || name.length > 50) {
+      return res.status(400).json({ error: "Name must be between 3 and 50 characters." });
+    }
+
+    if (description.length < 10 || description.length > 500) {
+      return res.status(400).json({ error: "Description must be between 10 and 500 characters." });
     }
 
     const newEntity = new Entity({ name, description });
     await newEntity.save();
+
     res.status(201).json({ message: "Entity created successfully!", entity: newEntity });
   } catch (error) {
     console.error("Error creating entity:", error);
@@ -104,9 +131,23 @@ router.get("/entities/:id", async (req, res) => {
   }
 });
 
-// Update an entity
+// Update an entity with validation
 router.put("/entities/:id", async (req, res) => {
   try {
+    const { name, description } = req.body;
+
+    if (!validateFields({ name, description })) {
+      return res.status(400).json({ error: "Name and description are required" });
+    }
+
+    if (name.length < 3 || name.length > 50) {
+      return res.status(400).json({ error: "Name must be between 3 and 50 characters." });
+    }
+
+    if (description.length < 10 || description.length > 500) {
+      return res.status(400).json({ error: "Description must be between 10 and 500 characters." });
+    }
+
     const updatedEntity = await Entity.findByIdAndUpdate(req.params.id, req.body, {
       new: true,
       runValidators: true,

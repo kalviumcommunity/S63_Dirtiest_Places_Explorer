@@ -12,7 +12,7 @@ const UpdateEntity = () => {
     });
 
     useEffect(() => {
-        fetch(`http://localhost:5002/api/entities/${id}`)
+        fetch(`http://localhost:5003/api/entities/${id}`)
             .then((res) => res.json())
             .then((data) => setFormData({
                 name: data.name,
@@ -29,7 +29,7 @@ const UpdateEntity = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        await fetch(`http://localhost:5002/api/entities/${id}`, {
+        await fetch(`http://localhost:5003/api/entities/${id}`, {
             method: "PUT",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify(formData),
