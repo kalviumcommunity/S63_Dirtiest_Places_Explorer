@@ -38,14 +38,14 @@ const UpdateEntity = () => {
     };
 
     return (
-        <div>
-            <h2>Update Place Information</h2>
-            <form onSubmit={handleSubmit}>
-                <input type="text" name="name" placeholder="Name" value={formData.name} onChange={handleChange} required />
-                <input type="text" name="description" placeholder="Description" value={formData.description} onChange={handleChange} required />
-                <input type="text" name="image" placeholder="Image URL" value={formData.image} onChange={handleChange} required />
-                <input type="text" name="location" placeholder="Location" value={formData.location} onChange={handleChange} required />
-                <button type="submit">Update</button>
+        <div className="container"> {/* Center container */}
+            <h2 className="add-entity-title">Update Place Information</h2>
+            <form onSubmit={handleSubmit} className="add-entity-form">
+                <input type="text" name="name" placeholder="Name" value={formData.name} onChange={handleChange} required className="input" />
+                <input type="text" name="description" placeholder="Description" value={formData.description} onChange={handleChange} required className="input" />
+                <input type="text" name="image" placeholder="Image URL" value={formData.image} onChange={handleChange} required className="input" />
+                <input type="text" name="location" placeholder="Location" value={formData.location} onChange={handleChange} required className="input" />
+                <button type="submit" className="submit-button">Update</button>
             </form>
         </div>
     );
