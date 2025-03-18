@@ -7,7 +7,6 @@ const AddEntityForm = () => {
   const [location, setLocation] = useState("");
   const [places, setPlaces] = useState([]);
 
-  // Fetch the updated list of places
   useEffect(() => {
     fetch("http://localhost:5003/api/entities")
       .then((res) => res.json())
@@ -19,21 +18,16 @@ const AddEntityForm = () => {
     e.preventDefault();
     const newPlace = { name, description, image, location };
 
-
-
-
     await fetch("http://localhost:5003/api/entities", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(newPlace),
     });
 
-    // Refresh the list after submission
     fetch("http://localhost:5003/api/entities")
       .then((res) => res.json())
       .then((data) => setPlaces(data));
 
-    // Clear form fields
     setName("");
     setDescription("");
     setImage("");
@@ -41,20 +35,19 @@ const AddEntityForm = () => {
   };
 
   return (
-    <div>
-      <h2>Add a New Dirty Place</h2>
-      <form onSubmit={handleSubmit}>
-        <input type="text" placeholder="Name" value={name} onChange={(e) => setName(e.target.value)} required />
-        <input type="text" placeholder="Description" value={description} onChange={(e) => setDescription(e.target.value)} required />
-        <input type="text" placeholder="Image URL" value={image} onChange={(e) => setImage(e.target.value)} required />
-        <input type="text" placeholder="Location" value={location} onChange={(e) => setLocation(e.target.value)} required />
-        <button type="submit">Submit</button>
+    <div className="container"> {/* Center container */}
+      <h2 className="add-entity-title">Report a New Dirty Place</h2>
+      <form onSubmit={handleSubmit} className="add-entity-form">
+        <input type="text" placeholder="Name" value={name} onChange={(e) => setName(e.target.value)} required className="input" />
+        <input type="text" placeholder="Description" value={description} onChange={(e) => setDescription(e.target.value)} required className="input" />
+        <input type="text" placeholder="Image URL" value={image} onChange={(e) => setImage(e.target.value)} required className="input" />
+        <input type="text" placeholder="Location" value={location} onChange={(e) => setLocation(e.target.value)} required className="input" />
+        <button type="submit" className="submit-button">Submit</button>
       </form>
-
-      <h3>Reported Places</h3>
-      <ul>
+      <h3 className="reported-places-title">Reported Places</h3>
+      <ul className="place-list">
         {places.map((place) => (
-          <li key={place._id}>
+          <li key={place._id} className="place-item">
             <h4>{place.name}</h4>
             <p>{place.description}</p>
             <img src={place.image} alt={place.name} width="100" />

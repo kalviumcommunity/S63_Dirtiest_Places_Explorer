@@ -1,176 +1,131 @@
-/* General Layout */
-.home-container {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 20px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  background-color: #1E3A4A;
-  color: white;
-}
-
-/* Header */
-.home-header {
-  width: 100%;
-  text-align: center;
-  background-color: #2E616B;
-  padding: 20px;
-  border-radius: 10px;
-}
-
-.home-header nav ul {
-  list-style: none;
+/* General Styles */
+body {
+  font-family: 'Arial', sans-serif; /* Clean font for content */
+  background-color: #1a1a1a; /* Dark theme background */
+  color: #f5f5f5; /* Light text for contrast */
+  margin: 0;
   padding: 0;
-  display: flex;
+  display: flex; /* Centered layout */
   justify-content: center;
-  gap: 20px;
+  align-items: center;
+  height: 100vh; /* Full height */
 }
 
-.home-header nav ul li {
-  display: inline;
-}
-
-.home-header nav ul li a {
-  text-decoration: none;
-  color: white;
-  font-weight: bold;
-}
-
-/* Hero Section */
-.home-hero {
+/* Centered Container for Signup and Report Forms */
+.container {
   display: flex;
   flex-direction: column;
+  justify-content: center;
   align-items: center;
-  justify-content: center;
-  text-align: center;
-  padding: 50px 20px;
-  min-height: 400px;
+  max-width: 800px; /* Maximum width */
+  padding: 40px; /* More padding for bigger space */
+  background: #292929; /* Slightly lighter dark background */
+  border-radius: 10px; /* Rounded corners */
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.8); /* Strong shadow for depth */
+  text-align: center; /* Center text */
 }
 
-.hero-image {
-  position: relative;
-  width: 80%;
-  max-width: 600px;
+/* Form Titles */
+.signup-title, .add-entity-title {
+  font-family: 'Montserrat', sans-serif; /* A stylish font */
+  font-weight: 700; /* Bold font weight */
+  font-size: 30px; /* Large title font */
+  color: #0dcaf0; /* Bright blue for appeal */
+  margin-bottom: 25px; /* Margin below title */
+  text-align: center; /* Title centered */
+  text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.5); /* Subtle shadow */
 }
 
-.hero-image img {
+/* Input Fields */
+.input {
   width: 100%;
-  height: auto;
-  border-radius: 10px;
+  padding: 12px; 
+  margin: 12px 0; /* Larger spacing */
+  border: 1px solid #0dcaf0; /* Bright border */
+  border-radius: 8px; /* More rounded edges */
+  font-size: 16px; 
+  background: #222; /* Darker input background */
+  color: #ffffff; 
+  transition: border-color 0.3s ease; /* Transition effect */
 }
 
-.hero-overlay {
-  position: absolute;
-  bottom: 10%;
-  left: 50%;
-  transform: translateX(-50%);
-  background-color: rgba(0, 0, 0, 0.5);
-  color: white;
-  padding: 10px;
-  border-radius: 5px;
+.input:focus {
+  border-color: #00aaff; /* Highlight on focus */
+  outline: none; /* Remove outline */
 }
 
-/* Buttons */
-.hero-actions {
-  display: flex;
-  gap: 15px;
-  justify-content: center;
-  margin-top: 20px;
-}
-
-.hero-actions button {
-  padding: 10px 20px;
-  border: none;
-  background-color: #E63946;
-  color: white;
-  font-size: 16px;
-  cursor: pointer;
-  border-radius: 5px;
-}
-
-.hero-actions button:hover {
-  background-color: #D62828;
-}
-
-/* Places Section */
-.home-places {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  gap: 20px;
-  padding: 20px;
-}
-
-/* Place Card */
-.place-card {
-  background: white;
-  color: black;
-  padding: 15px;
+/* Button Styles */
+.submit-button {
+  padding: 12px 20px; 
+  background-color: #0dcaf0; /* Button background */
+  color: black; /* Button text color */
+  border: none; 
   border-radius: 8px;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+  cursor: pointer; 
+  font-size: 16px; 
+  margin-top: 15px; /* Space above button */
+  width: 100%; /* Full width button */
+  transition: background-color 0.3s ease, transform 0.2s ease; /* Button transition */
 }
 
-/* Footer */
-.home-footer {
-  margin-top: 30px;
-  text-align: center;
-  padding: 15px;
-  background-color: #2E616B;
-  width: 100%;
-  border-radius: 10px;
+.submit-button:hover {
+  background-color: #00aaff; /* Darker on hover */
+  transform: scale(1.05); /* Grow effect on hover */
 }
 
-/* Notification */
-.notification {
-  position: fixed;
-  top: 20px;
-  right: 20px;
-  background: #ffcc00;
-  color: black;
-  padding: 10px 20px;
-  border-radius: 5px;
+/* Error Message */
+.error {
+  color: #ff4d4d; /* Error message color */
+  margin: 10px 0;
+}
+
+/* Success Message */
+.success-message {
+  color: #28a745; /* Success message color */
   font-weight: bold;
+  margin: 10px 0;
 }
 
-/* Modal */
-.modal {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(0, 0, 0, 0.5);
-  display: flex;
-  align-items: center;
-  justify-content: center;
+/* Reported Places List */
+.place-list {
+  list-style: none; /* No bullet points */
+  padding: 0; /* Remove padding */
+  margin-top: 20px; /* Space above list */
+  text-align: left; /* Align list to the left */
 }
 
-.modal-content {
-  background: white;
-  padding: 20px;
-  border-radius: 10px;
-  width: 50%;
-  max-width: 500px;
-  text-align: center;
-  color: black;
-}
-
-.modal-content button {
-  background: red;
-  color: white;
-  border: none;
+.place-item {
   padding: 10px;
-  border-radius: 5px;
-  cursor: pointer;
+  border: 1px solid #444; /* Border for the item */
+  border-radius: 8px; /* Rounded edges */
+  margin: 10px 0; /* Spacing between items */
+  background: rgba(255, 255, 255, 0.1); /* Transparent item background */
 }
 
-.button {
-  display: block;
-  margin: 5px;
-  padding: 8px 12px;
-  background: red;
-  color: white;
-  border: none;
-  cursor: pointer;
+/* Image styling within the place item */
+.place-item img {
+  max-width: 100%; 
+  height: auto; 
 }
 
+/* Small Notes */
+.note {
+  font-size: 12px;
+  color: #b3b3b3; /* Light gray for notes */
+}
+
+/* Responsive Styles */
+@media (max-width: 600px) {
+  .container {
+    padding: 20px; /* Less padding */
+  }
+
+  .signup-title, .add-entity-title {
+    font-size: 24px; /* Responsive font size */
+  }
+
+  .submit-button {
+    padding: 10px; /* Responsive button size */
+    font-size: 14px; 
+  }
+}
