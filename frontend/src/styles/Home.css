@@ -163,3 +163,14 @@
   border-radius: 5px;
   cursor: pointer;
 }
+
+.button {
+  display: block;
+  margin: 5px;
+  padding: 8px 12px;
+  background: red;
+  color: white;
+  border: none;
+  cursor: pointer;
+}
+

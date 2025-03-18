@@ -1,7 +1,10 @@
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import PlaceCard from "../components/PlaceCard";
 import Signup from "../components/Signup";
+import UpdateEntity from "../components/UpdateEntity";
 import AddEntity from "../components/AddEntity";
+import EntityList from "../components/EntityList";
 import "../styles/Home.css";
 
 function Home() {
@@ -10,24 +13,25 @@ function Home() {
   const [places, setPlaces] = useState([]);
   const [loading, setLoading] = useState(true);
   const [notification, setNotification] = useState(null);
+  const navigate = useNavigate();
 
   useEffect(() => {
-    const fetchPlaces = async () => {
-      setLoading(true);
-      try {
-        const response = await fetch("http://localhost:8000/api/entities");
-        const data = await response.json();
-        setPlaces(data);
-      } catch (error) {
-        console.error("Error fetching places:", error);
-        showNotification("Failed to load places. Please try again later.");
-      } finally {
-        setLoading(false);
-      }
-    };
-
     fetchPlaces();
   }, []);
+
+  const fetchPlaces = async () => {
+    setLoading(true);
+    try {
+      const response = await fetch("http://localhost:5002/api/entities");
+      const data = await response.json();
+      setPlaces(data);
+    } catch (error) {
+      console.error("Error fetching places:", error);
+      showNotification("Failed to load places. Please try again later.");
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const handleNewEntity = (newEntity) => {
     setPlaces([...places, newEntity]);
@@ -35,15 +39,26 @@ function Home() {
     showNotification("New place reported successfully!");
   };
 
+  const handleDelete = async (id) => {
+    try {
+      await fetch(`http://localhost:5002/api/entities/${id}`, { method: "DELETE" });
+      setPlaces(places.filter(place => place._id !== id));
+      showNotification("Place deleted successfully!");
+    } catch (error) {
+      console.error("Error deleting place:", error);
+      showNotification("Failed to delete place. Try again.");
+    }
+  };
+
   const showNotification = (message) => {
     setNotification(message);
-    setTimeout(() => setNotification(null), 3000);
+    setTimeout(() => setNotification(null), 5002);
   };
 
   return (
     <div className="home-container">
       {notification && <div className="notification">{notification}</div>}
-      
+
       {/* Header */}
       <header className="home-header">
         <h1>Dirtiest Places Explorer</h1>
@@ -63,9 +78,9 @@ function Home() {
         <section className="home-hero">
           {!loading && places.length > 0 ? (
             <div className="hero-image">
-              <img src={places[0].image} alt={places[0].title} />
+              <img src={places[0].image} alt={places[0].name} />
               <div className="hero-overlay">
-                <h2>{places[0].title}</h2>
+                <h2>{places[0].name}</h2>
                 <p>{places[0].description?.substring(0, 120)}...</p>
               </div>
             </div>
@@ -84,8 +99,13 @@ function Home() {
 
         {/* Places List */}
         <section className="home-places">
-          {places.map((place, index) => (
-            <PlaceCard key={index} place={place} />
+          {places.map((place) => (
+            <PlaceCard
+              key={place._id}
+              place={place}
+              onDelete={() => handleDelete(place._id)}
+              onEdit={() => navigate(`/update/${place._id}`)}
+            />
           ))}
         </section>
       </main>
@@ -101,6 +121,8 @@ function Home() {
           <div className="modal-content">
             <button onClick={() => setShowAddEntity(false)}>Close</button>
             <AddEntity onNewEntity={handleNewEntity} />
+            <UpdateEntity />
+            <EntityList />
           </div>
         </div>
       )}

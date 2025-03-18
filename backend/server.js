@@ -42,7 +42,7 @@ app.get("/api/users", async (req, res) => {
 app.use("/api", router); // Fixed: using `routes` instead of `authRoutes`
 
 // Start the server after connecting to the database
-const PORT = process.env.PORT || 8000;
+const PORT = process.env.PORT;
 
 connectDB().then(() => {
   app.listen(PORT, () => console.log(`🚀 Server running on port ${PORT}`));
