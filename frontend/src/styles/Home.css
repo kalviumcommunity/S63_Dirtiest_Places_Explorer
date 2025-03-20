@@ -1,14 +1,14 @@
 /* General Styles */
 body {
-  font-family: 'Arial', sans-serif; /* Clean font for content */
-  background-color: #1a1a1a; /* Dark theme background */
-  color: #f5f5f5; /* Light text for contrast */
+  font-family: 'Arial', sans-serif;
+  background-color: #1a1a1a;
+  color: #f5f5f5;
   margin: 0;
   padding: 0;
-  display: flex; /* Centered layout */
+  display: flex;
   justify-content: center;
   align-items: center;
-  height: 100vh; /* Full height */
+  height: 100vh;
 }
 
 /* Centered Container for Signup and Report Forms */
@@ -17,115 +17,133 @@ body {
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  max-width: 800px; /* Maximum width */
-  padding: 40px; /* More padding for bigger space */
-  background: #292929; /* Slightly lighter dark background */
-  border-radius: 10px; /* Rounded corners */
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.8); /* Strong shadow for depth */
-  text-align: center; /* Center text */
+  max-width: 800px;
+  padding: 40px;
+  background: #292929;
+  border-radius: 10px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.8);
+  text-align: center;
 }
 
 /* Form Titles */
 .signup-title, .add-entity-title {
-  font-family: 'Montserrat', sans-serif; /* A stylish font */
-  font-weight: 700; /* Bold font weight */
-  font-size: 30px; /* Large title font */
-  color: #0dcaf0; /* Bright blue for appeal */
-  margin-bottom: 25px; /* Margin below title */
-  text-align: center; /* Title centered */
-  text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.5); /* Subtle shadow */
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 700;
+  font-size: 30px;
+  color: #0dcaf0;
+  margin-bottom: 25px;
+  text-align: center;
+  text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.5);
 }
 
 /* Input Fields */
 .input {
   width: 100%;
-  padding: 12px; 
-  margin: 12px 0; /* Larger spacing */
-  border: 1px solid #0dcaf0; /* Bright border */
-  border-radius: 8px; /* More rounded edges */
-  font-size: 16px; 
-  background: #222; /* Darker input background */
-  color: #ffffff; 
-  transition: border-color 0.3s ease; /* Transition effect */
+  padding: 12px;
+  margin: 12px 0;
+  border: 1px solid #0dcaf0;
+  border-radius: 8px;
+  font-size: 16px;
+  background: #222;
+  color: #ffffff;
+  transition: border-color 0.3s ease;
 }
 
 .input:focus {
-  border-color: #00aaff; /* Highlight on focus */
-  outline: none; /* Remove outline */
+  border-color: #00aaff;
+  outline: none;
 }
 
-/* Button Styles */
+/* Submit Button Styles */
 .submit-button {
-  padding: 12px 20px; 
-  background-color: #0dcaf0; /* Button background */
-  color: black; /* Button text color */
-  border: none; 
+  padding: 12px 20px;
+  background-color: #0dcaf0;
+  color: black;
+  border: none;
   border-radius: 8px;
-  cursor: pointer; 
-  font-size: 16px; 
-  margin-top: 15px; /* Space above button */
-  width: 100%; /* Full width button */
-  transition: background-color 0.3s ease, transform 0.2s ease; /* Button transition */
+  cursor: pointer;
+  font-size: 16px;
+  margin-top: 15px;
+  width: 100%;
+  transition: background-color 0.3s ease, transform 0.2s ease;
 }
 
 .submit-button:hover {
-  background-color: #00aaff; /* Darker on hover */
-  transform: scale(1.05); /* Grow effect on hover */
+  background-color: #00aaff;
+  transform: scale(1.05);
+}
+
+/* Delete Button Styles */
+.delete-button {
+  padding: 12px 20px;
+  background-color: #ff4d4d;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 16px;
+  margin-left: 10px;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.delete-button:hover {
+  background-color: #cc0000;
+  transform: scale(1.05);
 }
 
 /* Error Message */
 .error {
-  color: #ff4d4d; /* Error message color */
+  color: #ff4d4d;
   margin: 10px 0;
 }
 
 /* Success Message */
 .success-message {
-  color: #28a745; /* Success message color */
+  color: #28a745;
   font-weight: bold;
   margin: 10px 0;
 }
 
 /* Reported Places List */
 .place-list {
-  list-style: none; /* No bullet points */
-  padding: 0; /* Remove padding */
-  margin-top: 20px; /* Space above list */
-  text-align: left; /* Align list to the left */
+  list-style: none;
+  padding: 0;
+  margin-top: 20px;
+  text-align: left;
 }
 
 .place-item {
   padding: 10px;
-  border: 1px solid #444; /* Border for the item */
-  border-radius: 8px; /* Rounded edges */
-  margin: 10px 0; /* Spacing between items */
-  background: rgba(255, 255, 255, 0.1); /* Transparent item background */
+  border: 1px solid #444;
+  border-radius: 8px;
+  margin: 10px 0;
+  background: rgba(255, 255, 255, 0.1);
 }
 
-/* Image styling within the place item */
+/* Image Styling */
 .place-item img {
-  max-width: 100%; 
-  height: auto; 
+  max-width: 100%;
+  height: auto;
 }
 
-/* Small Notes */
+/* Notes */
 .note {
   font-size: 12px;
-  color: #b3b3b3; /* Light gray for notes */
+  color: #b3b3b3;
 }
 
 /* Responsive Styles */
 @media (max-width: 600px) {
   .container {
-    padding: 20px; /* Less padding */
+    padding: 20px;
   }
 
   .signup-title, .add-entity-title {
-    font-size: 24px; /* Responsive font size */
+    font-size: 24px;
   }
 
-  .submit-button {
-    padding: 10px; /* Responsive button size */
-    font-size: 14px; 
+  .submit-button, .delete-button {
+    padding: 10px;
+    font-size: 14px;
   }
 }
