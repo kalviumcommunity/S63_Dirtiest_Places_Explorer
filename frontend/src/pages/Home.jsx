@@ -5,6 +5,7 @@ import Signup from "../components/Signup";
 import UpdateEntity from "../components/UpdateEntity";
 import AddEntity from "../components/AddEntity";
 import EntityList from "../components/EntityList";
+import UserSelect from "../components/UserSelect";
 import "../styles/Home.css";
 
 function Home() {
@@ -22,7 +23,9 @@ function Home() {
   const fetchPlaces = async () => {
     setLoading(true);
     try {
-      const response = await fetch("http://localhost:5003/api/entities");
+      const response = await fetch("http://localhost:5004/api/entities");
+      if (!response.ok) throw new Error(`Error: ${response.status} ${response.statusText}`);
+      
       const data = await response.json();
       setPlaces(data);
     } catch (error) {
@@ -41,7 +44,9 @@ function Home() {
 
   const handleDelete = async (id) => {
     try {
-      await fetch(`http://localhost:5003/api/entities/${id}`, { method: "DELETE" });
+      const response = await fetch(`http://localhost:5004/api/entities/${id}`, { method: "DELETE" });
+      if (!response.ok) throw new Error(`Error: ${response.status} ${response.statusText}`);
+      
       setPlaces(places.filter(place => place._id !== id));
       showNotification("Place deleted successfully!");
     } catch (error) {
@@ -52,7 +57,7 @@ function Home() {
 
   const showNotification = (message) => {
     setNotification(message);
-    setTimeout(() => setNotification(null), 5003);
+    setTimeout(() => setNotification(null), 5000);
   };
 
   return (
@@ -78,10 +83,10 @@ function Home() {
         <section className="home-hero">
           {!loading && places.length > 0 ? (
             <div className="hero-image">
-              <img src={places[0].image} alt={places[0].name} />
+              <img src={places[0]?.image || "/default-image.jpg"} alt={places[0]?.name || "Unknown Place"} />
               <div className="hero-overlay">
-                <h2>{places[0].name}</h2>
-                <p>{places[0].description?.substring(0, 120)}...</p>
+                <h2>{places[0]?.name}</h2>
+                <p>{places[0]?.description?.substring(0, 120) || "No description available"}...</p>
               </div>
             </div>
           ) : (
@@ -121,8 +126,9 @@ function Home() {
           <div className="modal-content">
             <button onClick={() => setShowAddEntity(false)}>Close</button>
             <AddEntity onNewEntity={handleNewEntity} />
-            <UpdateEntity />
-            <EntityList />
+            <EntityList/>
+            <UserSelect/>
+            <UpdateEntity/>
           </div>
         </div>
       )}

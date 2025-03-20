@@ -1,16 +1,57 @@
 const express = require("express");
-const bcrypt = require("bcryptjs"); // Secure password storage
-const Report = require("../models/schema"); // Report schema
-const User = require("../models/user"); // User schema
-const Entity = require("../models/entity"); // Entity schema
+const bcrypt = require("bcryptjs");
+const mongoose = require("mongoose");
+const Report = require("../models/schema");
+const User = require("../models/user");
+const Entity = require("../models/entity");
 const router = express.Router();
 
-// Helper function for validation
+// ✅ Helper function for validation
 const validateFields = (fields) => {
-  return Object.values(fields).every(value => value && value.trim().length > 0);
+  return Object.entries(fields).every(([key, value]) => {
+    if (typeof value === "object" && value !== null) {
+      return validateFields(value);
+    }
+    if (typeof value === "string") return value.trim().length > 0;
+    return value !== null && value !== undefined;
+  });
 };
 
-// Signup route with password hashing
+// ✅ Centralized Error Handler
+const handleError = (res, error, message) => {
+  console.error(message, error);
+  res.status(500).json({ error: message, details: error.message });
+};
+
+// ✅ Password Hashing
+const hashPassword = async (password) => {
+  try {
+    return await bcrypt.hash(password, 10);
+  } catch (error) {
+    console.error("Error hashing password:", error);
+    throw new Error("Error hashing password");
+  }
+};
+
+// ✅ Email Validation
+const isValidEmail = (email) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+
+// ✅ Password Validation
+const isValidPassword = (password) => password.length >= 8;
+
+// ✅ URL Validation
+const isValidUrl = (url) => {
+  try {
+    new URL(url);
+    return true;
+  } catch {
+    return false;
+  }
+};
+
+// --------------------------------
+// ✅ USER SIGNUP ROUTE
+// --------------------------------
 router.post("/signup", async (req, res) => {
   try {
     const { name, email, password } = req.body;
@@ -19,8 +60,12 @@ router.post("/signup", async (req, res) => {
       return res.status(400).json({ error: "All fields are required" });
     }
 
-    if (!email.includes("@")) {
+    if (!isValidEmail(email)) {
       return res.status(400).json({ error: "Invalid email format" });
+    }
+
+    if (!isValidPassword(password)) {
+      return res.status(400).json({ error: "Password must be at least 8 characters long" });
     }
 
     const existingUser = await User.findOne({ email });
@@ -28,66 +73,46 @@ router.post("/signup", async (req, res) => {
       return res.status(400).json({ error: "Email already in use" });
     }
 
-    // Hash password before saving
-    const hashedPassword = await bcrypt.hash(password, 10);
+    const hashedPassword = await hashPassword(password);
     const newUser = new User({ name, email, password: hashedPassword });
     await newUser.save();
 
     res.status(201).json({ message: "User created successfully" });
   } catch (error) {
-    console.error("Signup Error:", error);
-    res.status(500).json({ error: "Server error", details: error.message });
+    handleError(res, error, "Signup Error");
   }
 });
 
-// Create a new report with validation
-router.post("/reports", async (req, res) => {
+// --------------------------------
+// ✅ GET ALL USERS (for Dropdown)
+// --------------------------------
+router.get("/users", async (req, res) => {
   try {
-    const { description, category, latitude, longitude, imageUrl } = req.body;
-
-    if (!validateFields({ description, category, latitude, longitude, imageUrl })) {
-      return res.status(400).json({ error: "All fields are required" });
-    }
-
-    if (!imageUrl.startsWith("http")) {
-      return res.status(400).json({ error: "Invalid image URL" });
-    }
-
-    const newReport = new Report({
-      description,
-      category,
-      location: { latitude, longitude },
-      imageUrl,
-    });
-
-    await newReport.save();
-    res.status(201).json({ message: "Report created successfully!", report: newReport });
+    const users = await User.find({}, "name _id");
+    res.status(200).json(users);
   } catch (error) {
-    console.error("Error creating report:", error);
-    res.status(500).json({ error: "Error creating report", details: error.message });
+    handleError(res, error, "Error fetching users");
   }
 });
 
-// Get all reports
-router.get("/reports", async (req, res) => {
-  try {
-    const reports = await Report.find();
-    res.status(200).json(reports);
-  } catch (error) {
-    console.error("Error fetching reports:", error);
-    res.status(500).json({ error: "Error fetching reports", details: error.message });
-  }
-});
-
-// CRUD Routes for Entities
-
-// Create a new entity with validation
+// --------------------------------
+// ✅ CREATE ENTITY WITH VALIDATION
+// --------------------------------
 router.post("/entities", async (req, res) => {
   try {
-    const { name, description } = req.body;
+    const { name, description, created_by } = req.body;
 
-    if (!validateFields({ name, description })) {
-      return res.status(400).json({ error: "Name and description are required" });
+    if (!validateFields({ name, description, created_by })) {
+      return res.status(400).json({ error: "Name, description, and created_by are required" });
+    }
+
+    if (!mongoose.Types.ObjectId.isValid(created_by)) {
+      return res.status(400).json({ error: "Invalid created_by user ID" });
+    }
+
+    const userExists = await User.findById(created_by);
+    if (!userExists) {
+      return res.status(404).json({ error: "User not found" });
     }
 
     if (name.length < 3 || name.length > 50) {
@@ -98,79 +123,61 @@ router.post("/entities", async (req, res) => {
       return res.status(400).json({ error: "Description must be between 10 and 500 characters." });
     }
 
-    const newEntity = new Entity({ name, description });
+    const newEntity = new Entity({ name, description, created_by });
     await newEntity.save();
 
     res.status(201).json({ message: "Entity created successfully!", entity: newEntity });
   } catch (error) {
-    console.error("Error creating entity:", error);
-    res.status(500).json({ error: "Error creating entity", details: error.message });
+    handleError(res, error, "Error creating entity");
   }
 });
 
-// Get all entities
+// --------------------------------
+// ✅ GET ENTITIES (Filtered by User)
+// --------------------------------
+// ✅ GET ENTITIES (Filtered by User)
 router.get("/entities", async (req, res) => {
   try {
-    const entities = await Entity.find();
+    const { created_by } = req.query;
+
+    let filter = {};
+    if (created_by) {
+      if (!mongoose.Types.ObjectId.isValid(created_by)) {
+        return res.status(400).json({ error: "Invalid user ID format" });
+      }
+      filter.created_by = created_by;
+    }
+
+    const entities = await Entity.find(filter);
     res.status(200).json(entities);
+
   } catch (error) {
-    console.error("Error fetching entities:", error);
-    res.status(500).json({ error: "Error fetching entities", details: error.message });
+    handleError(res, error, "Error fetching entities"); // Ensure catch block is present
   }
 });
 
-// Get a single entity by ID
+
+// --------------------------------
+// ✅ GET ENTITY BY ID
+// --------------------------------
 router.get("/entities/:id", async (req, res) => {
   try {
-    const entity = await Entity.findById(req.params.id);
-    if (!entity) return res.status(404).json({ error: "Entity not found" });
+    const { id } = req.params;
+
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+      return res.status(400).json({ error: "Invalid entity ID format" });
+    }
+
+    const entity = await Entity.findById(id);
+    if (!entity) {
+      return res.status(404).json({ error: "Entity not found" });
+    }
+
     res.status(200).json(entity);
   } catch (error) {
-    console.error("Error fetching entity:", error);
-    res.status(500).json({ error: "Error fetching entity", details: error.message });
+    handleError(res, error, "Error fetching entity by ID");
   }
 });
 
-// Update an entity with validation
-router.put("/entities/:id", async (req, res) => {
-  try {
-    const { name, description } = req.body;
-
-    if (!validateFields({ name, description })) {
-      return res.status(400).json({ error: "Name and description are required" });
-    }
-
-    if (name.length < 3 || name.length > 50) {
-      return res.status(400).json({ error: "Name must be between 3 and 50 characters." });
-    }
-
-    if (description.length < 10 || description.length > 500) {
-      return res.status(400).json({ error: "Description must be between 10 and 500 characters." });
-    }
-
-    const updatedEntity = await Entity.findByIdAndUpdate(req.params.id, req.body, {
-      new: true,
-      runValidators: true,
-    });
-
-    if (!updatedEntity) return res.status(404).json({ error: "Entity not found" });
-    res.status(200).json({ message: "Entity updated successfully!", entity: updatedEntity });
-  } catch (error) {
-    console.error("Error updating entity:", error);
-    res.status(500).json({ error: "Error updating entity", details: error.message });
-  }
-});
-
-// Delete an entity
-router.delete("/entities/:id", async (req, res) => {
-  try {
-    const deletedEntity = await Entity.findByIdAndDelete(req.params.id);
-    if (!deletedEntity) return res.status(404).json({ error: "Entity not found" });
-    res.status(200).json({ message: "Entity deleted successfully!" });
-  } catch (error) {
-    console.error("Error deleting entity:", error);
-    res.status(500).json({ error: "Error deleting entity", details: error.message });
-  }
-});
-
+// At the end of routes.js
 module.exports = router;

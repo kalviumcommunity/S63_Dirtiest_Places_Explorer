@@ -8,7 +8,7 @@ const AddEntityForm = () => {
   const [places, setPlaces] = useState([]);
 
   useEffect(() => {
-    fetch("http://localhost:5003/api/entities")
+    fetch("http://localhost:5004/api/entities")
       .then((res) => res.json())
       .then((data) => setPlaces(data))
       .catch((err) => console.error(err));
@@ -18,13 +18,13 @@ const AddEntityForm = () => {
     e.preventDefault();
     const newPlace = { name, description, image, location };
 
-    await fetch("http://localhost:5003/api/entities", {
+    await fetch("http://localhost:5004/api/entities", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(newPlace),
     });
 
-    fetch("http://localhost:5003/api/entities")
+    fetch("http://localhost:5004/api/entities")
       .then((res) => res.json())
       .then((data) => setPlaces(data));
 
