@@ -9,7 +9,7 @@ const UserSelect = () => {
   useEffect(() => {
     const fetchUsers = async () => {
       try {
-        const res = await fetch("http://localhost:5004/api/users");
+        const res = await fetch("http://localhost:5004/api/mysql/users");
         if (!res.ok) throw new Error(`Error: ${res.statusText}`);
         const data = await res.json();
         setUsers(data);

@@ -1,9 +1,9 @@
 const express = require("express");
 const bcrypt = require("bcryptjs");
 const mongoose = require("mongoose");
-const Report = require("../models/schema");
-const User = require("../models/user");
-const Entity = require("../models/entity");
+const Report = require("../../models/mongo/schema");
+const User = require("../../models/mongo/user");
+const Entity = require("../../models/mongo/entity");
 const router = express.Router();
 
 // ✅ Helper function for validation
