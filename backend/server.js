@@ -5,7 +5,7 @@ const cors = require("cors");
 const dotenv = require("dotenv");
 const mongoRoutes = require("./routers/mongo/routes");
 const mysqlRoutes = require("./routers/mysql/routes");
-
+const authRoutes =  require("./routers/mongo/auth");
 dotenv.config();
 
 const app = express();
@@ -45,6 +45,7 @@ mysqlDB.connect((err) => {
 // API Routes
 app.use("/api", mongoRoutes);
 app.use("/api/mysql", mysqlRoutes);
+app.use("/api/mongo", authRoutes);
 
 // Error handling for undefined routes
 app.use((req, res, next) => {
@@ -58,7 +59,7 @@ app.use((err, req, res, next) => {
 });
 
 // Start the server
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT;
 
 connectMongoDB().then(() => {
   app.listen(PORT, () => console.log(`🚀 Server running on http://localhost:${PORT}`));
