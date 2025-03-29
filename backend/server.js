@@ -3,6 +3,7 @@ const mongoose = require("mongoose");
 const mysql = require("mysql2");
 const cors = require("cors");
 const dotenv = require("dotenv");
+const cookieParser = require("cookie-parser");
 const mongoRoutes = require("./routers/mongo/routes");
 const mysqlRoutes = require("./routers/mysql/routes");
 const authRoutes =  require("./routers/mongo/auth");
@@ -13,6 +14,7 @@ const app = express();
 // Middleware
 app.use(cors());
 app.use(express.json());
+app.use(cookieParser());
 
 // Connect to MongoDB
 const connectMongoDB = async () => {
