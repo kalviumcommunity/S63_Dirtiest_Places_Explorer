@@ -1,0 +1,252 @@
+/* UpdateEntity Styles */
+.update-entity {
+  max-width: 800px;
+  margin: 2rem auto;
+  padding: 2rem;
+  background: white;
+  border-radius: 20px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+  animation: slideUp 0.5s ease-out;
+}
+
+.update-entity__header {
+  text-align: center;
+  margin-bottom: 2.5rem;
+}
+
+.update-entity__title {
+  font-size: 2rem;
+  color: var(--dark-color);
+  margin-bottom: 0.5rem;
+  font-weight: 700;
+}
+
+.update-entity__subtitle {
+  color: var(--text-color);
+  opacity: 0.8;
+  font-size: 1.1rem;
+}
+
+.update-entity__form {
+  display: grid;
+  gap: 1.5rem;
+}
+
+.update-entity__form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.update-entity__label {
+  font-weight: 500;
+  color: var(--dark-color);
+  font-size: 0.95rem;
+}
+
+.update-entity__input,
+.update-entity__textarea {
+  padding: 1rem;
+  border: 2px solid var(--border-color);
+  border-radius: 10px;
+  font-size: 1rem;
+  transition: all 0.3s ease;
+  background: white;
+}
+
+.update-entity__textarea {
+  min-height: 120px;
+  resize: vertical;
+}
+
+.update-entity__input:focus,
+.update-entity__textarea:focus {
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 3px rgba(44, 62, 80, 0.1);
+  outline: none;
+}
+
+.update-entity__button-group {
+  display: flex;
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.update-entity__button {
+  flex: 1;
+  padding: 1rem;
+  border: none;
+  border-radius: 10px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.update-entity__button--save {
+  background: var(--success-color);
+  color: white;
+}
+
+.update-entity__button--cancel {
+  background: var(--light-color);
+  color: var(--dark-color);
+}
+
+.update-entity__button--delete {
+  background: var(--danger-color);
+  color: white;
+}
+
+.update-entity__button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.update-entity__button:active {
+  transform: translateY(0);
+}
+
+.update-entity__error {
+  background-color: #fee2e2;
+  color: #dc2626;
+  padding: 1rem;
+  border-radius: 10px;
+  font-size: 0.9rem;
+  margin-bottom: 1rem;
+  animation: shake 0.5s ease-in-out;
+}
+
+.update-entity__success {
+  background-color: #dcfce7;
+  color: #16a34a;
+  padding: 1rem;
+  border-radius: 10px;
+  font-size: 0.9rem;
+  margin-bottom: 1rem;
+  animation: slideUp 0.5s ease-out;
+}
+
+/* Image Preview */
+.update-entity__image-preview {
+  width: 100%;
+  height: 200px;
+  border-radius: 10px;
+  overflow: hidden;
+  margin-top: 1rem;
+  position: relative;
+}
+
+.update-entity__image-preview img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.update-entity__image-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.update-entity__image-preview:hover .update-entity__image-overlay {
+  opacity: 1;
+}
+
+.update-entity__image-button {
+  background: white;
+  color: var(--dark-color);
+  padding: 0.5rem 1rem;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.update-entity__image-button:hover {
+  background: var(--primary-color);
+  color: white;
+}
+
+/* Confirmation Dialog */
+.update-entity__confirm-dialog {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: white;
+  padding: 2rem;
+  border-radius: 15px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+  z-index: 1000;
+  animation: fadeIn 0.3s ease-out;
+}
+
+.update-entity__confirm-message {
+  margin-bottom: 1.5rem;
+  text-align: center;
+  color: var(--dark-color);
+}
+
+.update-entity__confirm-buttons {
+  display: flex;
+  gap: 1rem;
+}
+
+/* Animations */
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-5px); }
+  75% { transform: translateX(5px); }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .update-entity {
+    margin: 1rem;
+    padding: 1.5rem;
+  }
+
+  .update-entity__title {
+    font-size: 1.8rem;
+  }
+
+  .update-entity__button-group {
+    flex-direction: column;
+  }
+
+  .update-entity__button {
+    width: 100%;
+  }
+
+  .update-entity__confirm-buttons {
+    flex-direction: column;
+  }
+} 
