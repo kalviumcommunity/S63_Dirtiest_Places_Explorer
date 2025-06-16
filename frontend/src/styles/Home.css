@@ -3,7 +3,7 @@
   width: 100vw;
   overflow-x: hidden;
   /* Animated greenish gradient background */
-  background: linear-gradient(-45deg, #a8e063, #27d478, #43cea2, #185a9d);
+  background: linear-gradient(-45deg, #a8e063, #56ab2f, #43cea2, #185a9d);
   background-size: 400% 400%;
   animation: gradientBG 12s ease-in-out infinite;
   display: flex;

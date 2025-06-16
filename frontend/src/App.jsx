@@ -1,11 +1,3 @@
-<<<<<<< HEAD
-import { Routes, Route } from "react-router-dom";
-import Navbar from "./components/Navbar";
-import Home from "./pages/Home";
-import Signup from "./components/Signup";
-import Login from "./components/Login";
-import "./App.css";
-=======
 import { useState } from "react";
 import { Routes, Route } from "react-router-dom";
 import Navbar from "./components/Navbar/Navbar";
@@ -16,8 +8,7 @@ import UpdateEntity from "./components/UpdateEntity/UpdateEntity";
 import UserSelect from "./components/UserSelect/UserSelect";
 import Login from "./pages/Login";
 import Signup from "./components/Signup/Signup";
-import "./styles/components/App.css";
->>>>>>> 35ae1b39daf1e2fb54660d1a77e83c3315f8d0b9
+
 
 function App() {
   const [entities, setEntities] = useState([
@@ -83,19 +74,6 @@ function App() {
 
   return (
     <div className="app">
-<<<<<<< HEAD
-      <Navbar />
-      <main className="app__main">
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/signup" element={<Signup />} />
-          <Route path="/login" element={<Login />} />
-          <Route path="/explore" element={<div style={{padding: '2rem', textAlign: 'center', color: '#F5F5DC'}}>Explore page coming soon...</div>} />
-          <Route path="/report" element={<div style={{padding: '2rem', textAlign: 'center', color: '#F5F5DC'}}>Report page coming soon...</div>} />
-          <Route path="/about" element={<div style={{padding: '2rem', textAlign: 'center', color: '#F5F5DC'}}>About page coming soon...</div>} />
-        </Routes>
-      </main>
-=======
       <Navbar selectedUser={selectedUser} />
       <main className="app__main">
         <Routes>
@@ -113,7 +91,6 @@ function App() {
           {notification.message}
         </div>
       )}
->>>>>>> 35ae1b39daf1e2fb54660d1a77e83c3315f8d0b9
     </div>
   );
 }
