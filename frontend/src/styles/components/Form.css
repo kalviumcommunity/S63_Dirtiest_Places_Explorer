@@ -1,0 +1,236 @@
+/* Form Styles */
+.form {
+  width: 100%;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.form__header {
+  margin-bottom: var(--spacing-xl);
+  text-align: center;
+}
+
+.form__title {
+  font-size: var(--font-size-xlarge);
+  color: var(--dark-color);
+  margin: 0 0 var(--spacing-xs);
+}
+
+.form__subtitle {
+  color: var(--text-color);
+  margin: 0;
+}
+
+.form__body {
+  background-color: white;
+  padding: var(--spacing-xl);
+  border-radius: var(--border-radius-lg);
+  box-shadow: var(--shadow-md);
+}
+
+.form__group {
+  margin-bottom: var(--spacing-lg);
+}
+
+.form__group:last-child {
+  margin-bottom: 0;
+}
+
+.form__label {
+  display: block;
+  margin-bottom: var(--spacing-xs);
+  color: var(--text-color);
+  font-weight: 500;
+}
+
+.form__label--required::after {
+  content: '*';
+  color: var(--error-color);
+  margin-left: var(--spacing-xs);
+}
+
+.form__help {
+  margin-top: var(--spacing-xs);
+  font-size: var(--font-size-small);
+  color: var(--text-color-light);
+}
+
+.form__error {
+  margin-top: var(--spacing-xs);
+  font-size: var(--font-size-small);
+  color: var(--error-color);
+}
+
+.form__footer {
+  margin-top: var(--spacing-xl);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: var(--spacing-md);
+}
+
+.form__actions {
+  display: flex;
+  gap: var(--spacing-md);
+}
+
+.form__link {
+  color: var(--primary-color);
+  text-decoration: none;
+  font-weight: 500;
+  transition: color var(--transition-normal);
+}
+
+.form__link:hover {
+  color: var(--primary-color-dark);
+  text-decoration: underline;
+}
+
+/* Form Variants */
+.form--inline {
+  display: flex;
+  align-items: flex-end;
+  gap: var(--spacing-md);
+}
+
+.form--inline .form__group {
+  margin-bottom: 0;
+  flex: 1;
+}
+
+/* Form Grid */
+.form--grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: var(--spacing-lg);
+}
+
+.form--grid .form__group:last-child {
+  grid-column: 1 / -1;
+}
+
+/* Form with Divider */
+.form__divider {
+  margin: var(--spacing-xl) 0;
+  display: flex;
+  align-items: center;
+  text-align: center;
+  color: var(--text-color-light);
+}
+
+.form__divider::before,
+.form__divider::after {
+  content: '';
+  flex: 1;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.form__divider::before {
+  margin-right: var(--spacing-md);
+}
+
+.form__divider::after {
+  margin-left: var(--spacing-md);
+}
+
+/* Form with Social Buttons */
+.form__social {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  gap: var(--spacing-md);
+  margin-top: var(--spacing-lg);
+}
+
+.form__social-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--spacing-sm);
+  padding: var(--spacing-sm) var(--spacing-md);
+  border: 1px solid var(--border-color);
+  border-radius: var(--border-radius-md);
+  background-color: white;
+  color: var(--text-color);
+  font-weight: 500;
+  cursor: pointer;
+  transition: all var(--transition-normal);
+}
+
+.form__social-button:hover {
+  background-color: var(--light-color);
+}
+
+.form__social-button__icon {
+  font-size: 1.2em;
+}
+
+/* Form Loading State */
+.form--loading {
+  opacity: 0.7;
+  pointer-events: none;
+}
+
+.form__loading-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(255, 255, 255, 0.8);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1;
+}
+
+/* Form Success State */
+.form__success {
+  text-align: center;
+  padding: var(--spacing-xl);
+}
+
+.form__success-icon {
+  font-size: 48px;
+  color: var(--success-color);
+  margin-bottom: var(--spacing-md);
+}
+
+.form__success-title {
+  font-size: var(--font-size-large);
+  color: var(--dark-color);
+  margin: 0 0 var(--spacing-xs);
+}
+
+.form__success-message {
+  color: var(--text-color);
+  margin: 0;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .form__body {
+    padding: var(--spacing-lg);
+  }
+
+  .form--grid {
+    grid-template-columns: 1fr;
+  }
+
+  .form--inline {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .form__footer {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .form__actions {
+    flex-direction: column;
+  }
+
+  .form__social {
+    grid-template-columns: 1fr;
+  }
+} 
