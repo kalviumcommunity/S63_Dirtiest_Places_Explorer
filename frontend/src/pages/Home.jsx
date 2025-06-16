@@ -5,7 +5,7 @@ import Signup from "../components/Signup/Signup";
 import AddEntity from "../components/AddEntity/AddEntity";
 import "../styles/pages/Home.css";
 
-<<<<<<< HEAD
+
 function Home() {
   const [places, setPlaces] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -77,7 +77,7 @@ function Home() {
             <span role="img" aria-label="Impact">💡</span>
             <h3>Impact Stories</h3>
             <p>Read about places transformed by community action.</p>
-=======
+
 function Home({ entities }) {
   const [showSignup, setShowSignup] = useState(false);
   const [showAddEntity, setShowAddEntity] = useState(false);
@@ -191,7 +191,7 @@ function Home({ entities }) {
               setShowAddEntity(false);
               showNotification("New place reported successfully!");
             }} />
->>>>>>> 35ae1b39daf1e2fb54660d1a77e83c3315f8d0b9
+
           </div>
         </div>
       </section>
