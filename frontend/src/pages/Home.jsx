@@ -9,12 +9,8 @@ import UserSelect from "../components/UserSelect";
 import "../styles/Home.css";
 
 function Home() {
-  const [showSignup, setShowSignup] = useState(false);
-  const [showAddEntity, setShowAddEntity] = useState(false);
   const [places, setPlaces] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [notification, setNotification] = useState(null);
-  const navigate = useNavigate();
 
   useEffect(() => {
     fetchPlaces();
@@ -25,113 +21,83 @@ function Home() {
     try {
       const response = await fetch("http://localhost:5004/api/entities");
       if (!response.ok) throw new Error(`Error: ${response.status} ${response.statusText}`);
-      
       const data = await response.json();
       setPlaces(data);
     } catch (error) {
-      console.error("Error fetching places:", error);
-      showNotification("Failed to load places. Please try again later.");
+      // Optionally handle error
     } finally {
       setLoading(false);
     }
   };
 
-  const handleNewEntity = (newEntity) => {
-    setPlaces([...places, newEntity]);
-    setShowAddEntity(false);
-    showNotification("New place reported successfully!");
-  };
-
-  const handleDelete = async (id) => {
-    try {
-      const response = await fetch(`http://localhost:5004/api/entities/${id}`, { method: "DELETE" });
-      if (!response.ok) throw new Error(`Error: ${response.status} ${response.statusText}`);
-      
-      setPlaces(places.filter(place => place._id !== id));
-      showNotification("Place deleted successfully!");
-    } catch (error) {
-      console.error("Error deleting place:", error);
-      showNotification("Failed to delete place. Try again.");
-    }
-  };
-
-  const showNotification = (message) => {
-    setNotification(message);
-    setTimeout(() => setNotification(null), 5000);
-  };
-
   return (
-    <div className="home-container fade-in">
-      {notification && <div className="notification slide-in">{notification}</div>}
+    <div className="home-root">
+      <section className="hero-section">
+        <div className="hero-content">
+          <img
+            src="https://as2.ftcdn.net/jpg/05/69/10/07/1000_F_569100754_SeQldyRfBYuqEeFnpRJwRonVRd4NCtnR.jpg"
+            alt="Eco Illustration"
+            className="hero-img"
+          />
+          <h1>
+            <span className="highlight">Dirtiest Places Explorer</span>
+          </h1>
+          <p className="subtitle">
+            Identify, report, and track polluted places for a cleaner future.
+          </p>
+        </div>
+        <div className="hero-animations">
+          <img
+            src="https://images.squarespace-cdn.com/content/v1/5fd14a8ad4328f0b6168fcaa/8a3da05d-3982-4048-9bfa-dfe368187476/CCA+Photo.jpg?format=2500w"
+            alt="Clean City"
+            className="floating-img"
+            style={{ animationDelay: "0s" }}
+          />
+          <img
+            src="https://www.cityofeastdubuque.com/media/cms/volunteering_76d90288fecfa.jpeg"
+            alt="Community Action"
+            className="floating-img"
+            style={{ animationDelay: "1.5s" }}
+          />
+        </div>
+      </section>
 
-      {/* Header */}
-      <header className="home-header">
-        <h1>🌿 Dirtiest Places Explorer</h1>
-        <p>Identify, report, and track polluted places for a cleaner future.</p>
-        {/* <nav>
-          <ul>
-            <li><a href="#">Home</a></li>
-            <li><a href="#">Map</a></li>
-            <li><a href="#">About</a></li>
-            <li><a href="#">Contact</a></li>
-          </ul>
-        </nav> */}
-      </header>
-
-      {/* Main Content */}
-      <main className="home-main">
-        <section className="home-hero">
-          {!loading && places.length > 0 ? (
-            <div className="hero-image zoom-in">
-              <img src={places[0]?.image || "/default-image.jpg"} alt={places[0]?.name || "Unknown Place"} />
-              <div className="hero-overlay">
-                <h2>{places[0]?.name}</h2>
-                <p>{places[0]?.description?.substring(0, 120) || "No description available"}...</p>
-              </div>
-            </div>
-          ) : (
-            <div className="loading-message bounce">{loading ? "Loading..." : "No reported places yet"}</div>
-          )}
-          <div className="hero-actions">
-            {!showSignup ? (
-              <button className="green-button" onClick={() => setShowSignup(true)}>Signup to Report</button>
-            ) : (
-              <Signup />
-            )}
-            <button className="blue-button" onClick={() => setShowAddEntity(true)}>Report a Dirty Place</button>
+      <section className="features-section">
+        <h2>How It Works</h2>
+        <div className="features-cards">
+          <div className="feature-card">
+            <span role="img" aria-label="Community">🌱</span>
+            <h3>Community Driven</h3>
+            <p>Everyone can help spot and track pollution hotspots.</p>
           </div>
-        </section>
-
-        {/* Places List */}
-        <section className="home-places fade-in">
-          {places.map((place) => (
-            <PlaceCard
-              key={place._id}
-              place={place}
-              onDelete={() => handleDelete(place._id)}
-              onEdit={() => navigate(`/update/${place._id}`)}
-            />
-          ))}
-        </section>
-      </main>
-
-      {/* Footer */}
-      <footer className="home-footer slide-up">
-        <p>© 2025 Dirtiest Places Explorer | Promoting Environmental Awareness</p>
-      </footer>
-
-      {/* Modal for Adding Entity */}
-      {showAddEntity && (
-        <div className="modal fade-in">
-          <div className="modal-content">
-            <button onClick={() => setShowAddEntity(false)}>Close</button>
-            <AddEntity onNewEntity={handleNewEntity} />
-            <EntityList/>
-            <UserSelect/>
-            <UpdateEntity/>
+          <div className="feature-card">
+            <span role="img" aria-label="Tracking">📊</span>
+            <h3>Real-Time Tracking</h3>
+            <p>See changes and improvements as they happen.</p>
+          </div>
+          <div className="feature-card">
+            <span role="img" aria-label="Impact">💡</span>
+            <h3>Impact Stories</h3>
+            <p>Read about places transformed by community action.</p>
           </div>
         </div>
-      )}
+      </section>
+
+      <section className="gallery-section">
+        <h2>Gallery</h2>
+        <div className="gallery">
+          <img src="https://www.thehindu.com/news/cities/chennai/6naqz6/article26359253.ece/ALTERNATES/LANDSCAPE_615/25THBEACH" alt="Before Cleanup" />
+          <img src="https://www.re-thinkingthefuture.com/wp-content/uploads/2021/07/A4751-10-worlds-most-polluted-cities-in-2021.jpg" alt="Polluted Place" />
+          <img src="https://cdn.zmescience.com/wp-content/uploads/2015/04/trsh.webp" alt="After Cleanup" />
+        </div>
+      </section>
+
+      <section className="cta-section">
+        <h2>Join the Movement</h2>
+        <p>
+          Explore the dirtiest places, get inspired by cleanups, and help make your city greener!
+        </p>
+      </section>
     </div>
   );
 }
