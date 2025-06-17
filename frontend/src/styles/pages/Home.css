@@ -1,235 +1,585 @@
 /* Home Page Styles */
-.home-page {
+.home-root {
   min-height: 100vh;
-  background-color: var(--light-bg);
+  background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%);
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  overflow-x: hidden;
 }
 
 /* Hero Section */
-.home-hero {
+.hero-section {
   position: relative;
-  height: 80vh;
-  overflow: hidden;
-  background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)),
-              url('https://images.unsplash.com/photo-1586075010923-2dd4570fb338?ixlib=rb-1.2.1&auto=format&fit=crop&w=1920&q=80');
-  background-size: cover;
-  background-position: center;
+  min-height: 100vh;
   display: flex;
-  flex-direction: column;
-  justify-content: center;
   align-items: center;
-  text-align: center;
-  color: white;
+  justify-content: center;
   padding: 2rem;
-}
-
-.hero-image {
-  position: relative;
-  width: 100%;
-  height: 100%;
+  background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)),
+              url('https://thumbs.dreamstime.com/b/volunteers-garbage-bags-cleaning-park-area-volunteering-charity-people-ecology-concept-group-happy-95979510.jpg') center/cover;
   overflow: hidden;
 }
 
-.hero-image img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  transition: transform 0.5s ease;
+.hero-content {
+  text-align: center;
+  max-width: 800px;
+  padding: 3rem;
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+  border-radius: 20px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  animation: fadeInUp 1s ease-out;
 }
 
-.hero-image:hover img {
-  transform: scale(1.05);
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
-.hero-overlay {
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  padding: 2rem;
-  background: linear-gradient(transparent, rgba(0, 0, 0, 0.8));
+.hero-img {
+  width: 120px;
+  height: 120px;
+  object-fit: contain;
+  margin-bottom: 2rem;
+  animation: float 6s ease-in-out infinite;
+  filter: drop-shadow(0 10px 20px rgba(0, 0, 0, 0.1));
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-20px); }
+}
+
+.hero-content h1 {
+  margin-bottom: 1.5rem;
+}
+
+.hero-content .highlight {
+  background: linear-gradient(45deg, #2196f3, #4caf50);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  font-size: 3.5rem;
+  font-weight: bold;
+  display: inline-block;
+  animation: gradientFlow 3s ease infinite;
+}
+
+@keyframes gradientFlow {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+.hero-content .subtitle {
   color: white;
-}
-
-.hero-overlay h2 {
-  font-size: 2.5rem;
-  margin-bottom: 1rem;
-  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
-}
-
-.hero-overlay p {
   font-size: 1.2rem;
-  opacity: 0.9;
-  max-width: 600px;
-  margin: 0 auto;
+  margin: 1.5rem 0;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 }
 
-.hero-actions {
+.hero-buttons {
   display: flex;
-  gap: 1rem;
+  gap: 1.5rem;
+  justify-content: center;
   margin-top: 2rem;
 }
 
-.green-button, .blue-button {
+.primary-button, .secondary-button {
   padding: 1rem 2rem;
-  border: none;
   border-radius: 50px;
   font-size: 1.1rem;
   font-weight: 600;
   cursor: pointer;
   transition: all 0.3s ease;
   text-transform: uppercase;
-  letter-spacing: 1px;
+  letter-spacing: 0.5px;
 }
 
-.green-button {
-  background: var(--success-color);
+.primary-button {
+  background: linear-gradient(45deg, #2196f3, #4caf50);
   color: white;
+  border: none;
+  padding: 1rem 2rem;
+  font-size: 1.1rem;
+  border-radius: 30px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
 }
 
-.blue-button {
-  background: var(--primary-color);
-  color: white;
-}
-
-.green-button:hover, .blue-button:hover {
+.primary-button:hover {
   transform: translateY(-2px);
-  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+  background: linear-gradient(45deg, #1976d2, #388e3c);
 }
 
-/* Places List Section */
-.home-places {
-  padding: 4rem 2rem;
-  max-width: 1200px;
-  margin: 0 auto;
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  gap: 2rem;
-}
-
-/* Loading and Empty States */
-.loading-message {
-  font-size: 1.5rem;
+.secondary-button {
+  background: transparent;
   color: white;
-  text-align: center;
-  padding: 2rem;
+  border: 2px solid white;
 }
 
-/* Footer */
-.home-footer {
-  background: var(--dark-color);
-  color: white;
-  text-align: center;
-  padding: 2rem;
-  margin-top: auto;
+.primary-button:hover, .secondary-button:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 25px rgba(33, 150, 243, 0.4);
 }
 
-/* Animations */
-.zoom-in {
-  animation: zoomIn 0.5s ease-out;
+.hero-animations {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 1;
 }
 
-.bounce {
-  animation: bounce 1s infinite;
+.floating-img {
+  position: absolute;
+  width: 150px;
+  height: 150px;
+  object-fit: cover;
+  border-radius: 20px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+  opacity: 0.8;
+  animation: floatAround 20s linear infinite;
 }
 
-.slide-up {
-  animation: slideUp 0.5s ease-out;
+.floating-img:nth-child(1) {
+  top: 20%;
+  left: 10%;
+  animation-delay: 0s;
 }
 
-.fade-in {
-  animation: fadeIn 0.5s ease-out;
+.floating-img:nth-child(2) {
+  top: 60%;
+  right: 10%;
+  animation-delay: -10s;
 }
 
-@keyframes zoomIn {
-  from {
-    transform: scale(0.95);
-    opacity: 0;
+@keyframes floatAround {
+  0% {
+    transform: translate(0, 0) rotate(0deg);
   }
-  to {
-    transform: scale(1);
-    opacity: 1;
-  }
-}
-
-@keyframes bounce {
-  0%, 100% {
-    transform: translateY(0);
+  25% {
+    transform: translate(100px, 50px) rotate(5deg);
   }
   50% {
-    transform: translateY(-10px);
+    transform: translate(50px, 100px) rotate(0deg);
+  }
+  75% {
+    transform: translate(-50px, 50px) rotate(-5deg);
+  }
+  100% {
+    transform: translate(0, 0) rotate(0deg);
   }
 }
 
-@keyframes slideUp {
-  from {
-    transform: translateY(20px);
-    opacity: 0;
-  }
-  to {
-    transform: translateY(0);
-    opacity: 1;
-  }
+/* Features Section */
+.features-section {
+  padding: 5rem 2rem;
+  background: white;
+  position: relative;
+  overflow: hidden;
 }
 
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
-}
-
-/* Modal */
-.modal {
-  position: fixed;
+.features-section::before {
+  content: '';
+  position: absolute;
   top: 0;
   left: 0;
   right: 0;
-  bottom: 0;
-  background: rgba(0, 0, 0, 0.8);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 1000;
+  height: 100%;
+  background: linear-gradient(45deg, rgba(33, 150, 243, 0.05) 0%, rgba(25, 118, 210, 0.05) 100%);
+  z-index: 0;
 }
 
-.modal-content {
+.features-section h2 {
+  text-align: center;
+  font-size: 3rem;
+  color: #1976d2;
+  margin-bottom: 4rem;
+  font-weight: 700;
+  position: relative;
+}
+
+.features-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 2rem;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2rem;
+  position: relative;
+  z-index: 1;
+}
+
+.feature-card {
   background: white;
   padding: 2rem;
   border-radius: 15px;
-  max-width: 600px;
-  width: 90%;
-  max-height: 90vh;
-  overflow-y: auto;
+  text-align: center;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+  animation: fadeInUp 0.5s ease-out;
+  border: 1px solid rgba(33, 150, 243, 0.1);
   position: relative;
+  overflow: hidden;
+}
+
+.feature-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(45deg, rgba(33, 150, 243, 0.05) 0%, rgba(25, 118, 210, 0.05) 100%);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.feature-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+}
+
+.feature-card:hover::before {
+  opacity: 1;
+}
+
+.feature-card span {
+  font-size: 3.5rem;
+  margin-bottom: 1.5rem;
+  display: block;
+  transition: transform 0.3s ease;
+}
+
+.feature-card:hover span {
+  transform: scale(1.1);
+}
+
+.feature-card h3 {
+  color: #1976d2;
+  font-size: 1.75rem;
+  margin-bottom: 1rem;
+  font-weight: 600;
+}
+
+.feature-card p {
+  color: #64748b;
+  line-height: 1.7;
+  font-size: 1.1rem;
+}
+
+/* Gallery Section */
+.gallery-section {
+  padding: 5rem 2rem;
+  background: white;
+  position: relative;
+}
+
+.gallery-section h2 {
+  text-align: center;
+  font-size: 3rem;
+  color: #1976d2;
+  margin-bottom: 4rem;
+  font-weight: 700;
+}
+
+.gallery {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 2rem;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2rem;
+}
+
+.gallery img {
+  width: 100%;
+  height: 250px;
+  object-fit: cover;
+  border-radius: 15px;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+.gallery img:hover {
+  transform: scale(1.05);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+}
+
+/* Places List */
+.places-list {
+  max-width: 1200px;
+  margin: 4rem auto 0;
+  padding: 2rem;
+  background: white;
+  border-radius: 20px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+}
+
+.places-list h3 {
+  color: #2e7d32;
+  font-size: 2rem;
+  margin-bottom: 1.5rem;
+  text-align: center;
+}
+
+.places-list ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: grid;
+  gap: 1rem;
+}
+
+.places-list li {
+  padding: 1rem;
+  background: #f8fafc;
+  border-radius: 10px;
+  color: #334155;
+  font-size: 1.1rem;
+  transition: all 0.3s ease;
+}
+
+.places-list li:hover {
+  background: #f1f5f9;
+  transform: translateX(10px);
 }
 
 /* Responsive Design */
 @media (max-width: 768px) {
-  .home-hero {
-    height: 60vh;
+  .hero-content {
+    padding: 2rem;
   }
 
-  .hero-overlay h2 {
+  .hero-content .highlight {
+    font-size: 2.5rem;
+  }
+
+  .hero-content .subtitle {
+    font-size: 1.2rem;
+  }
+
+  .hero-buttons {
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .primary-button, .secondary-button {
+    width: 100%;
+  }
+
+  .features-section h2,
+  .gallery-section h2 {
+    font-size: 2.5rem;
+  }
+
+  .features-cards,
+  .gallery {
+    grid-template-columns: 1fr;
+  }
+
+  .gallery img {
+    height: 250px;
+  }
+}
+
+@media (max-width: 480px) {
+  .hero-content .highlight {
     font-size: 2rem;
   }
 
-  .hero-overlay p {
-    font-size: 1rem;
+  .hero-content .subtitle {
+    font-size: 1.1rem;
   }
 
-  .hero-actions {
-    flex-direction: column;
-    width: 100%;
-    max-width: 300px;
+  .feature-card {
+    padding: 1.5rem;
   }
 
-  .green-button, .blue-button {
-    width: 100%;
+  .gallery img {
+    height: 200px;
+  }
+}
+
+.impact-section {
+  padding: 5rem 2rem;
+  background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%);
+  text-align: center;
+}
+
+.impact-section h2 {
+  font-size: 2.5rem;
+  color: #1976d2;
+  margin-bottom: 3rem;
+  position: relative;
+  display: inline-block;
+}
+
+.impact-section h2::after {
+  content: '';
+  position: absolute;
+  bottom: -10px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 80px;
+  height: 3px;
+  background: linear-gradient(45deg, #2196f3, #4caf50);
+  border-radius: 2px;
+}
+
+.impact-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 2rem;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2rem;
+}
+
+.impact-card {
+  background: white;
+  padding: 2.5rem 2rem;
+  border-radius: 15px;
+  text-align: center;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+  animation: fadeInUp 0.5s ease-out;
+  position: relative;
+  overflow: hidden;
+}
+
+.impact-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 4px;
+  background: linear-gradient(45deg, #2196f3, #4caf50);
+}
+
+.impact-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+}
+
+.impact-card h3 {
+  font-size: 3rem;
+  background: linear-gradient(45deg, #2196f3, #4caf50);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  margin-bottom: 0.5rem;
+  font-weight: bold;
+}
+
+.impact-card p {
+  font-size: 1.2rem;
+  color: #333;
+  font-weight: 500;
+}
+
+.cta-section {
+  padding: 6rem 2rem;
+  text-align: center;
+  background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%);
+  position: relative;
+  overflow: hidden;
+}
+
+.cta-section::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: url('https://thumbs.dreamstime.com/b/volunteers-garbage-bags-cleaning-park-area-volunteering-charity-people-ecology-concept-group-happy-95979510.jpg') center/cover;
+  opacity: 0.1;
+  z-index: 0;
+}
+
+.cta-section > * {
+  position: relative;
+  z-index: 1;
+}
+
+.cta-section h2 {
+  font-size: 3rem;
+  color: #1976d2;
+  margin-bottom: 1.5rem;
+  position: relative;
+  display: inline-block;
+}
+
+.cta-section h2::after {
+  content: '';
+  position: absolute;
+  bottom: -10px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100px;
+  height: 3px;
+  background: linear-gradient(45deg, #2196f3, #4caf50);
+  border-radius: 2px;
+}
+
+.cta-section p {
+  font-size: 1.3rem;
+  color: #333;
+  margin-bottom: 2.5rem;
+  max-width: 600px;
+  margin-left: auto;
+  margin-right: auto;
+  line-height: 1.6;
+}
+
+.cta-section .primary-button {
+  padding: 1.2rem 3rem;
+  font-size: 1.2rem;
+  background: linear-gradient(45deg, #2196f3, #4caf50);
+  border: none;
+  border-radius: 30px;
+  color: white;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+}
+
+.cta-section .primary-button:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+  background: linear-gradient(45deg, #1976d2, #388e3c);
+}
+
+@media (max-width: 768px) {
+  .impact-section h2,
+  .cta-section h2 {
+    font-size: 2rem;
   }
 
-  .home-places {
-    padding: 2rem 1rem;
+  .impact-card h3 {
+    font-size: 2.5rem;
   }
-} 
+
+  .cta-section p {
+    font-size: 1.1rem;
+    padding: 0 1rem;
+  }
+
+  .cta-section .primary-button {
+    padding: 1rem 2rem;
+    font-size: 1.1rem;
+  }
+}
+  

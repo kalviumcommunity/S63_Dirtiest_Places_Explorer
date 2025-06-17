@@ -1,13 +1,14 @@
 import { useState } from "react";
 import { Routes, Route } from "react-router-dom";
-import Navbar from "./components/Navbar/Navbar";
+import Navbar from "./components/Navbar";
 import Home from "./pages/Home";
 import EntityList from "./components/EntityList/EntityList";
 import AddEntity from "./components/AddEntity/AddEntity";
 import UpdateEntity from "./components/UpdateEntity/UpdateEntity";
 import UserSelect from "./components/UserSelect/UserSelect";
 import Login from "./pages/Login";
-import Signup from "./components/Signup/Signup";
+import Signup from "./pages/Signup";
+import Footer from './components/Footer';
 
 
 function App() {
@@ -91,6 +92,7 @@ function App() {
           {notification.message}
         </div>
       )}
+      <Footer />
     </div>
   );
 }

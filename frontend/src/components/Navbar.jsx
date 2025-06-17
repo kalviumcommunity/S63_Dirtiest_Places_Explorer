@@ -1,69 +1,42 @@
-import { useState } from "react";
-import { useNavigate, useLocation } from "react-router-dom";
-import "../styles/components/Navbar.css";
+import { Link } from 'react-router-dom';
+import '../styles/components/Navbar.css';
 
-function Navbar() {
-  const navigate = useNavigate();
-  const location = useLocation();
-  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-
-  const isActive = (path) => location.pathname === path;
-
-  const handleNavigation = (path) => {
-    navigate(path);
-    setIsMobileMenuOpen(false);
-  };
-
+function Navbar({ selectedUser }) {
   return (
-    <nav className="navbar-root">
-      <div className="navbar-logo" onClick={() => handleNavigation("/")}>
-        <span className="logo-icon">🌿</span>
-        <span className="logo-text">Dirty Places Explorer</span>
-      </div>
-      <div
-        className={`navbar-links ${isMobileMenuOpen ? "open" : ""}`}
-      >
-        <button
-          className={`nav-link ${isActive("/") ? "active" : ""}`}
-          onClick={() => handleNavigation("/")}
-        >
-          Home
-        </button>
-        <button
-          className={`nav-link ${isActive("/explore") ? "active" : ""}`}
-          onClick={() => handleNavigation("/explore")}
-        >
-          Explore
-        </button>
-        <button
-          className={`nav-link ${isActive("/report") ? "active" : ""}`}
-          onClick={() => handleNavigation("/report")}
-        >
-          Report
-        </button>
-        <button
-          className={`nav-link ${isActive("/about") ? "active" : ""}`}
-          onClick={() => handleNavigation("/about")}
-        >
-          About
-        </button>
-        <button
-          className="nav-btn login-btn"
-          onClick={() => handleNavigation("/login")}
-        >
-          Log In
-        </button>
-      </div>
-      <div
-        className={`navbar-burger ${isMobileMenuOpen ? "open" : ""}`}
-        onClick={() => setIsMobileMenuOpen((prev) => !prev)}
-      >
-        <span />
-        <span />
-        <span />
+    <nav className="navbar">
+      <div className="navbar__container">
+        <Link to="/" className="navbar__brand">
+          🌿 Dirtiest Places Explorer
+        </Link>
+        
+        <div className="navbar__menu">
+          <Link to="/" className="navbar__link">
+            Home
+          </Link>
+          <Link to="/places" className="navbar__link">
+            Places
+          </Link>
+          <Link to="/add-place" className="navbar__link">
+            Add Place
+          </Link>
+          {selectedUser ? (
+            <Link to="/profile" className="navbar__link">
+              Profile
+            </Link>
+          ) : (
+            <div className="navbar__auth">
+              <Link to="/login" className="navbar__button navbar__button--login">
+                Login
+              </Link>
+              <Link to="/signup" className="navbar__button navbar__button--signup">
+                Sign Up
+              </Link>
+            </div>
+          )}
+        </div>
       </div>
     </nav>
   );
 }
 
-export default Navbar;
+export default Navbar; 
