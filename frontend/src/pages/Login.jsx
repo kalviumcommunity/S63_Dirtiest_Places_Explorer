@@ -32,17 +32,31 @@ function Login() {
     }
 
     try {
-      // Simulate API call
-      await new Promise(resolve => setTimeout(resolve, 1000));
-      
-      // For demo purposes, hardcoded credentials
-      if (formData.email === 'demo@example.com' && formData.password === 'password') {
-        navigate('/');
-      } else {
-        setError('Invalid email or password');
+      const response = await fetch('http://localhost:5004/api/mongo/login', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          email: formData.email,
+          password: formData.password
+        }),
+        credentials: 'include' // This is important for cookies
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.error || 'Login failed');
       }
+
+      // Store the token
+      localStorage.setItem('token', data.token);
+      
+      // Redirect to places page
+      navigate('/places');
     } catch (err) {
-      setError('An error occurred. Please try again.');
+      setError(err.message || 'An error occurred. Please try again.');
     } finally {
       setLoading(false);
     }

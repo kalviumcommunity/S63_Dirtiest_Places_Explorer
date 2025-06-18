@@ -66,7 +66,7 @@ const Signup = () => {
 
     setIsLoading(true);
     try {
-      const response = await fetch('http://localhost:5004/api/auth/signup', {
+      const response = await fetch('http://localhost:5004/api/mongo/signup', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -87,8 +87,8 @@ const Signup = () => {
       // Store the token
       localStorage.setItem('token', data.token);
       
-      // Redirect to home page
-      navigate('/');
+      // Redirect to places page
+      navigate('/places');
     } catch (error) {
       setErrors(prev => ({
         ...prev,

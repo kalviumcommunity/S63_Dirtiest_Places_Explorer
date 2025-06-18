@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Routes, Route } from "react-router-dom";
 import Navbar from "./components/Navbar";
 import Home from "./pages/Home";
@@ -12,41 +12,51 @@ import Footer from './components/Footer';
 
 
 function App() {
-  const [entities, setEntities] = useState([
-    {
-      id: "1",
-      name: "Chernobyl Exclusion Zone",
-      location: "Ukraine",
-      description: "Site of the 1986 nuclear disaster, still highly contaminated with radiation.",
-      rating: 4.8,
-      image: "https://images.unsplash.com/photo-1513829596324-4bb2800c5efb?w=800&auto=format&fit=crop"
-    },
-    {
-      id: "2",
-      name: "Great Pacific Garbage Patch",
-      location: "Pacific Ocean",
-      description: "A massive collection of marine debris in the North Pacific Ocean.",
-      rating: 4.5,
-      image: "https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?w=800&auto=format&fit=crop"
-    },
-    {
-      id: "3",
-      name: "Yamuna River",
-      location: "India",
-      description: "One of the most polluted rivers in the world, heavily contaminated with industrial waste.",
-      rating: 4.2,
-      image: "https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?w=800&auto=format&fit=crop"
-    }
-  ]);
+  const [entities, setEntities] = useState([]);
   const [selectedUser, setSelectedUser] = useState(null);
   const [notification, setNotification] = useState(null);
 
-  const handleAddEntity = (newEntity) => {
-    setEntities(prev => [...prev, newEntity]);
-    setNotification({
-      type: "success",
-      message: "Place added successfully!"
+  // Fetch places from backend
+  const fetchPlaces = async () => {
+    try {
+      const res = await fetch("http://localhost:5004/api/mongo/places");
+      const data = await res.json();
+      setEntities(data.places || []);
+    } catch (err) {
+      // fallback: keep local state
+    }
+  };
+
+  useEffect(() => {
+    fetchPlaces();
+  }, []);
+
+  const handleAddEntity = async (newEntity) => {
+    // Prepare FormData for image upload
+    const formData = new FormData();
+    Object.entries(newEntity).forEach(([key, value]) => {
+      if (key === "images" && Array.isArray(value)) {
+        value.forEach((file, i) => formData.append("images", file));
+      } else {
+        formData.append(key, value);
+      }
     });
+    try {
+      await fetch("http://localhost:5004/api/mongo/places", {
+        method: "POST",
+        body: formData
+      });
+      setNotification({
+        type: "success",
+        message: "Place added successfully!"
+      });
+      fetchPlaces();
+    } catch (err) {
+      setNotification({
+        type: "error",
+        message: "Failed to add place."
+      });
+    }
   };
 
   const handleUpdateEntity = (updatedEntity) => {
