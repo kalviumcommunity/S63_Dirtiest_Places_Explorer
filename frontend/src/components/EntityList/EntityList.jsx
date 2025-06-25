@@ -28,6 +28,9 @@ function EntityList({ entities }) {
   const [category, setCategory] = useState("");
   const itemsPerPage = 6;
 
+  // Ensure entities is an array
+  const safeEntities = entities || [];
+
   useEffect(() => {
     // Simulate loading state
     const timer = setTimeout(() => {
@@ -37,14 +40,14 @@ function EntityList({ entities }) {
   }, []);
 
   const allCategories = [
-    ...new Set(entities.map(e => e.category).filter(Boolean))
+    ...new Set(safeEntities.map(e => e.category).filter(Boolean))
   ];
 
-  let filteredEntities = entities
+  let filteredEntities = safeEntities
     .filter(entity =>
-      (entity.location.toLowerCase().includes('india')) &&
-      (entity.name.toLowerCase().includes(filter.toLowerCase()) ||
-      entity.location.toLowerCase().includes(filter.toLowerCase())) &&
+      (entity.location && entity.location.toLowerCase().includes('india')) &&
+      (entity.name && entity.name.toLowerCase().includes(filter.toLowerCase()) ||
+      entity.location && entity.location.toLowerCase().includes(filter.toLowerCase())) &&
       (!category || entity.category === category)
     );
 
@@ -53,14 +56,18 @@ function EntityList({ entities }) {
       return sortOrder === "desc" ? b.rating - a.rating : a.rating - b.rating;
     }
     if (sortBy === "name") {
+      const nameA = a.name || '';
+      const nameB = b.name || '';
       return sortOrder === "desc"
-        ? b.name.localeCompare(a.name)
-        : a.name.localeCompare(b.name);
+        ? nameB.localeCompare(nameA)
+        : nameA.localeCompare(nameB);
     }
     if (sortBy === "newest") {
+      const dateA = a.reportedOn ? new Date(a.reportedOn) : new Date(0);
+      const dateB = b.reportedOn ? new Date(b.reportedOn) : new Date(0);
       return sortOrder === "desc"
-        ? new Date(b.reportedOn) - new Date(a.reportedOn)
-        : new Date(a.reportedOn) - new Date(b.reportedOn);
+        ? dateB - dateA
+        : dateA - dateB;
     }
     if (sortBy === "comments") {
       return sortOrder === "desc" ? b.commentsCount - a.commentsCount : a.commentsCount - b.commentsCount;
@@ -147,7 +154,7 @@ function EntityList({ entities }) {
         <>
           <div className="entity-list__grid">
             {currentEntities.map((entity) => (
-              <PlaceCard key={entity.id} place={entity} categoryColor={CATEGORY_COLORS[entity.category]} />
+              <PlaceCard key={entity._id || entity.id} place={entity} categoryColor={CATEGORY_COLORS[entity.category] || "#718096"} />
             ))}
           </div>
 
@@ -178,15 +185,17 @@ function EntityList({ entities }) {
       <div className="entity-list__stats">
         <div className="entity-list__stat-card">
           <h3>Total Places</h3>
-          <p>{entities.filter(e => e.location.toLowerCase().includes('india')).length}</p>
+          <p>{safeEntities.filter(e => e.location && e.location.toLowerCase().includes('india')).length}</p>
         </div>
         <div className="entity-list__stat-card">
           <h3>Average Rating</h3>
           <p>
-            {(
-              entities.filter(e => e.location.toLowerCase().includes('india')).reduce((acc, curr) => acc + curr.rating, 0) /
-              entities.filter(e => e.location.toLowerCase().includes('india')).length
-            ).toFixed(1)}
+            {(() => {
+              const indiaEntities = safeEntities.filter(e => e.location && e.location.toLowerCase().includes('india'));
+              return indiaEntities.length > 0 
+                ? (indiaEntities.reduce((acc, curr) => acc + curr.rating, 0) / indiaEntities.length).toFixed(1)
+                : '0.0';
+            })()}
           </p>
         </div>
         <div className="entity-list__stat-card">

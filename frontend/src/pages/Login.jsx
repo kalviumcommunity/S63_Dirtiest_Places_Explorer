@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import '../styles/pages/Login.css';
+import { jwtDecode } from "jwt-decode";
 
 function Login() {
   const [formData, setFormData] = useState({
@@ -52,6 +53,15 @@ function Login() {
 
       // Store the token
       localStorage.setItem('token', data.token);
+      // Decode token and store userId
+      try {
+        const decoded = jwtDecode(data.token);
+        if (decoded.userId || decoded._id) {
+          localStorage.setItem('userId', decoded.userId || decoded._id);
+        }
+      } catch (e) {
+        // Optionally handle decode error
+      }
       
       // Redirect to places page
       navigate('/places');
@@ -133,7 +143,7 @@ function Login() {
           </div>
 
           <button type="button" className="login-social-button">
-            <img src="https://www.google.com/favicon.ico" alt="Google" />
+            <img src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjQiIGhlaWdodD0iMjQiIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHBhdGggZD0iTTIyLjU2IDEyLjI1YzAgLS43OCAtLjA3IC0xLjUzIC0uMiAtMi4yNUgxMlYxNC43NWg1LjkyYy0uMjYgMS4zNyAtMS4wNCAyLjUzIC0yLjIxIDMuMzF2Mi43NmgzLjU3YzIuMDggLTEuOTIgMy4yOCAtNC43NCAzLjI4IC04LjA5eiIgZmlsbD0iIzQyODVGMyIvPgo8cGF0aCBkPSJNMTIgMjNjMi45NyAwIDUuNDYgLS45OCA2Ljg4IC0yLjY4bC0zLjU3IC0yLjc1Yy0uOTggLjY2IC0yLjIzIDEuMDYgLTMuMzEgMS4wNmMtMi41NCAwIC00LjY5IC0xLjcxIC01LjQ2IC00LjA2SDEuMDd2Mi44MkMyLjUzIDIwLjM4IDYuOTIgMjMgMTIgMjN6IiBmaWxsPSIjMzRBODUzIi8+CjxwYXRoIGQ9Ik01LjU0IDE0LjA5Yy0uMiAtLjY2IC0uMzEgLTEuMzYgLS4zMSAtMi4wOXMuMTEgLTEuNDMgLjMxIC0yLjA5VjYuMjlIMS4wN0MuMzYgNy45MiAwIDkuOTIgMCAxMnMuMzYgNC4wOCAxLjA3IDUuNzFsNC40NyAtMy42MnoiIGZpbGw9IiNGQkJDMDQiLz4KPHBhdGggZD0iTTEyIDQuNzVjMS43NyAwIDMuMzUuNjEgNC42IDEuNjl2My4xNkMxNS4yNCA5LjA5IDEzLjczIDguNSAxMiA4LjVjLTIuNTQgMCAtNC43OSAxLjcxIC01LjQ2IDQuMDZIMS4wN1Y2LjI5QzIuNTMgMy42MiA2LjkxIDEuMjUgMTIgMS4yNWMyLjk3IDAgNS40Ni45OCA2Ljg4IDIuNjhsLTMuNTcgMi43NUMxNC4wMiA0LjUgMTIuNzcgNC4xNSAxMS42OSA0LjE1SDExLjY5eiIgZmlsbD0iI0VBNDMzRiIvPgo8L3N2Zz4K" alt="Google" />
             Continue with Google
           </button>
         </form>

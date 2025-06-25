@@ -19,11 +19,16 @@ function App() {
   // Fetch places from backend
   const fetchPlaces = async () => {
     try {
-      const res = await fetch("http://localhost:5004/api/mongo/places");
+      const res = await fetch("http://localhost:5004/api/places");
+      if (!res.ok) {
+        throw new Error(`HTTP error! status: ${res.status}`);
+      }
       const data = await res.json();
       setEntities(data.places || []);
     } catch (err) {
+      console.error("Error fetching places:", err);
       // fallback: keep local state
+      setEntities([]);
     }
   };
 
@@ -35,14 +40,15 @@ function App() {
     // Prepare FormData for image upload
     const formData = new FormData();
     Object.entries(newEntity).forEach(([key, value]) => {
-      if (key === "images" && Array.isArray(value)) {
-        value.forEach((file, i) => formData.append("images", file));
-      } else {
+      if (key === "images" && Array.isArray(value) && value.length > 0) {
+        // Only send the first image as 'image'
+        formData.append("image", value[0]);
+      } else if (key !== "images") {
         formData.append(key, value);
       }
     });
     try {
-      await fetch("http://localhost:5004/api/mongo/places", {
+      await fetch("http://localhost:5004/api/places", {
         method: "POST",
         body: formData
       });

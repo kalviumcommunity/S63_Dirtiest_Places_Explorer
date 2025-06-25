@@ -13,7 +13,7 @@ const app = express();
 
 // Middleware
 app.use(cors({
-  origin: 'http://localhost:5173',
+  origin: ['http://localhost:5173', 'http://localhost:5174'],
   credentials: true
 }));
 app.use(express.json());
@@ -22,7 +22,7 @@ app.use(cookieParser());
 // Connect to MongoDB
 const connectMongoDB = async () => {
   try {
-    await mongoose.connect(process.env.MONGO_URI);
+    await mongoose.connect(process.env.MONGO_URI || 'mongodb://localhost:27017/dirtiest_places');
     console.log("✅ MongoDB connected successfully");
   } catch (error) {
     console.error("❌ MongoDB connection error:", error.message);
@@ -41,7 +41,6 @@ const mysqlDB = mysql.createConnection({
 mysqlDB.connect((err) => {
   if (err) {
     console.error("❌ MySQL connection failed:", err.message);
-    process.exit(1);
   } else {
     console.log("✅ MySQL connected successfully");
   }
@@ -64,7 +63,7 @@ app.use((err, req, res, next) => {
 });
 
 // Start the server
-const PORT = process.env.PORT;
+const PORT = process.env.PORT || 5004;
 
 connectMongoDB().then(() => {
   app.listen(PORT, () => console.log(`🚀 Server running on http://localhost:${PORT}`));

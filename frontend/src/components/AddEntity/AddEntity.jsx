@@ -104,7 +104,7 @@ function AddEntity({ onAdd }) {
   // Live preview card
   const preview = {
     ...formData,
-    image: imagePreviews[0] || "https://via.placeholder.com/300x200?text=Preview",
+    image: imagePreviews[0] || "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMzAwIiBoZWlnaHQ9IjIwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KICA8cmVjdCB3aWR0aD0iMzAwIiBoZWlnaHQ9IjIwMCIgZmlsbD0iI2Y3ZjdmNyIvPgogIDx0ZXh0IHg9IjE1MCIgeT0iMTAwIiBmb250LWZhbWlseT0iQXJpYWwsIHNhbnMtc2VyaWYiIGZvbnQtc2l6ZT0iMTYiIGZpbGw9IiM5OTkiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGR5PSIuM2VtIj5QcmV2aWV3PC90ZXh0Pgo8L3N2Zz4=",
     rating: formData.rating ? Number(formData.rating) : 0,
     commentsCount: 0,
     reportedOn: formData.date || new Date().toISOString().slice(0, 10),

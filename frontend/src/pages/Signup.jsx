@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import '../styles/pages/Signup.css';
+import { jwtDecode } from "jwt-decode";
 
 const Signup = () => {
   const navigate = useNavigate();
@@ -86,6 +87,15 @@ const Signup = () => {
 
       // Store the token
       localStorage.setItem('token', data.token);
+      // Decode token and store userId
+      try {
+        const decoded = jwtDecode(data.token);
+        if (decoded.userId || decoded._id) {
+          localStorage.setItem('userId', decoded.userId || decoded._id);
+        }
+      } catch (e) {
+        // Optionally handle decode error
+      }
       
       // Redirect to places page
       navigate('/places');

@@ -5,6 +5,8 @@ const Report = require("../../models/mongo/schema");
 const User = require("../../models/mongo/user");
 const Entity = require("../../models/mongo/entity");
 const router = express.Router();
+const multer = require('multer');
+const upload = multer();
 
 // ✅ Helper function for validation
 const validateFields = (fields) => {
@@ -176,6 +178,76 @@ router.get("/entities/:id", async (req, res) => {
     res.status(200).json(entity);
   } catch (error) {
     handleError(res, error, "Error fetching entity by ID");
+  }
+});
+
+// --------------------------------
+// ✅ CREATE PLACE (alias for ENTITY)
+// --------------------------------
+router.post("/places", upload.single('image'), async (req, res) => {
+  try {
+    console.log('Received body:', req.body); // Debug log
+    const { name, description, location, category, rating, created_by, reportedOn, commentsCount } = req.body;
+    let image = undefined;
+    if (req.file) {
+      // Store image as base64 string (for demo; use cloud storage in production)
+      image = `data:${req.file.mimetype};base64,${req.file.buffer.toString('base64')}`;
+    }
+    // Validate required fields
+    if (!validateFields({ name, description, location, category, created_by })) {
+      return res.status(400).json({ error: "Name, description, location, category, and created_by are required" });
+    }
+    if (!mongoose.Types.ObjectId.isValid(created_by)) {
+      return res.status(400).json({ error: "Invalid created_by user ID" });
+    }
+    const userExists = await User.findById(created_by);
+    if (!userExists) {
+      return res.status(404).json({ error: "User not found" });
+    }
+    if (name.length < 3 || name.length > 50) {
+      return res.status(400).json({ error: "Name must be between 3 and 50 characters." });
+    }
+    if (description.length < 10 || description.length > 500) {
+      return res.status(400).json({ error: "Description must be between 10 and 500 characters." });
+    }
+    // Create new entity with all fields
+    const newEntity = new Entity({
+      name,
+      description,
+      location,
+      category,
+      rating: rating !== undefined ? Number(rating) : 0,
+      image,
+      created_by,
+      reportedOn: reportedOn ? new Date(reportedOn) : Date.now(),
+      commentsCount: commentsCount !== undefined ? Number(commentsCount) : 0
+    });
+    await newEntity.save();
+    res.status(201).json({ message: "Place created successfully!", entity: newEntity });
+  } catch (error) {
+    handleError(res, error, "Error creating place");
+  }
+});
+
+// --------------------------------
+// ✅ GET PLACES (alias for ENTITIES)
+// --------------------------------
+router.get("/places", async (req, res) => {
+  try {
+    const { created_by } = req.query;
+
+    let filter = {};
+    if (created_by && String(created_by).trim()) {
+      if (!mongoose.Types.ObjectId.isValid(created_by)) {
+        return res.status(400).json({ error: "Invalid user ID format" });
+      }
+      filter.created_by = created_by;
+    }
+
+    const entities = await Entity.find(filter);
+    res.status(200).json({ places: entities });
+  } catch (error) {
+    handleError(res, error, "Error fetching places");
   }
 });
 
