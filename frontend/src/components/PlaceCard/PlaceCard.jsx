@@ -22,14 +22,18 @@ function PlaceCard({ place, categoryColor }) {
   };
 
   return (
-    <div 
-      className="place-card"
-      onMouseEnter={() => setIsHovered(true)}
-      onMouseLeave={() => setIsHovered(false)}
-    >
-      <div className="place-card__image-container">
+    <div className="place-card">
+      <div 
+        className="place-card__image-container"
+        onMouseEnter={() => setIsHovered(true)}
+        onMouseLeave={() => setIsHovered(false)}
+      >
         <img
-          src={place.image || "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMzAwIiBoZWlnaHQ9IjIwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KICA8cmVjdCB3aWR0aD0iMzAwIiBoZWlnaHQ9IjIwMCIgZmlsbD0iI2Y3ZjdmNyIvPgogIDx0ZXh0IHg9IjE1MCIgeT0iMTAwIiBmb250LWZhbWlseT0iQXJpYWwsIHNhbnMtc2VyaWYiIGZvbnQtc2l6ZT0iMTYiIGZpbGw9IiM5OTkiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGR5PSIuM2VtIj5ObyBJbWFnZTwvdGV4dD4KPC9zdmc+"}
+          src={
+            (Array.isArray(place.images) && place.images.length > 0 && place.images[0]) ||
+            place.image ||
+            "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMzAwIiBoZWlnaHQ9IjIwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KICA8cmVjdCB3aWR0aD0iMzAwIiBoZWlnaHQ9IjIwMCIgZmlsbD0iI2Y3ZjdmNyIvPgogIDx0ZXh0IHg9IjE1MCIgeT0iMTAwIiBmb250LWZhbWlseT0iQXJpYWwsIHNhbnMtc2VyaWYiIGZvbnQtc2l6ZT0iMTYiIGZpbGw9IiM5OTkiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGR5PSIuM2VtIj5ObyBJbWFnZTwvdGV4dD4KPC9zdmc+"
+          }
           alt={place.name || "Place"}
           className="place-card__image"
         />
@@ -41,6 +45,19 @@ function PlaceCard({ place, categoryColor }) {
           </div>
         </div>
         <span className="place-card__category-badge" style={{ background: categoryColor }}>{place.category || "Unknown"}</span>
+        {isHovered && (
+          <div className="place-card__hover-info">
+            <div className="place-card__hover-content">
+              <h4>Quick Facts</h4>
+              <ul>
+                <li>Category: {place.category || "Unknown"}</li>
+                <li>Rating: {formatRating(place.rating)}/5</li>
+                <li>Comments: {place.commentsCount || 0}</li>
+                <li>Reported: {place.reportedOn ? new Date(place.reportedOn).toLocaleDateString() : "Unknown date"}</li>
+              </ul>
+            </div>
+          </div>
+        )}
       </div>
       
       <div className="place-card__content">
@@ -68,19 +85,6 @@ function PlaceCard({ place, categoryColor }) {
             View Details
           </Link>
         </div>
-        {isHovered && (
-          <div className="place-card__hover-info">
-            <div className="place-card__hover-content">
-              <h4>Quick Facts</h4>
-              <ul>
-                <li>Category: {place.category || "Unknown"}</li>
-                <li>Rating: {formatRating(place.rating)}/5</li>
-                <li>Comments: {place.commentsCount || 0}</li>
-                <li>Reported: {place.reportedOn ? new Date(place.reportedOn).toLocaleDateString() : "Unknown date"}</li>
-              </ul>
-            </div>
-          </div>
-        )}
       </div>
     </div>
   );

@@ -37,14 +37,14 @@ function AddEntity({ onAdd }) {
   };
 
   const handleImageChange = (e) => {
-    const files = Array.from(e.target.files).slice(0, 3);
+    const files = Array.from(e.target.files).slice(0, 5);
     setFormData(prev => ({ ...prev, images: files }));
     setImagePreviews(files.map(file => URL.createObjectURL(file)));
   };
 
   const handleDrop = (e) => {
     e.preventDefault();
-    const files = Array.from(e.dataTransfer.files).slice(0, 3);
+    const files = Array.from(e.dataTransfer.files).slice(0, 5);
     setFormData(prev => ({ ...prev, images: files }));
     setImagePreviews(files.map(file => URL.createObjectURL(file)));
   };
@@ -78,7 +78,7 @@ function AddEntity({ onAdd }) {
     return "";
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     const err = validate();
     if (err) {
@@ -86,19 +86,42 @@ function AddEntity({ onAdd }) {
       return;
     }
     setIsLoading(true);
-    // Simulate upload
-    setTimeout(() => {
-      onAdd({
-        id: Date.now().toString(),
-        ...formData,
-        rating: Number(formData.rating),
-        image: imagePreviews[0] || "",
-        commentsCount: 0,
-        reportedOn: formData.date || new Date().toISOString().slice(0, 10)
+    const userId = localStorage.getItem('userId');
+    if (!userId) {
+      setError('Please log in to add a place.');
+      setIsLoading(false);
+      return;
+    }
+    const formDataToSend = new FormData();
+    formDataToSend.append('name', formData.name);
+    formDataToSend.append('location', formData.location);
+    formDataToSend.append('category', formData.category);
+    formDataToSend.append('description', formData.description);
+    formDataToSend.append('rating', formData.rating);
+    formDataToSend.append('reportedOn', formData.date || new Date().toISOString().slice(0, 10));
+    formDataToSend.append('commentsCount', 0);
+    if (formData.images && formData.images.length > 0) {
+      formData.images.forEach(file => {
+        formDataToSend.append('images', file);
       });
+    }
+    try {
+      const response = await fetch('http://localhost:5004/api/places', {
+        method: 'POST',
+        body: formDataToSend,
+        credentials: 'include'
+      });
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.error || `HTTP error! status: ${response.status}`);
+      }
       setIsLoading(false);
       handleClear();
-    }, 1200);
+      window.location.href = '/places';
+    } catch (err) {
+      setIsLoading(false);
+      setError(err.message || 'Failed to add place.');
+    }
   };
 
   // Live preview card
@@ -191,12 +214,12 @@ function AddEntity({ onAdd }) {
               onClick={() => fileInputRef.current && fileInputRef.current.click()}
             >
               <span className="add-entity__upload-icon">＋</span>
-              <span>Drag & drop or click to upload (max 3, .jpg/.png)</span>
+              <span>Drag & drop or click to upload (max 5, .jpg/.png)</span>
               <input
                 type="file"
                 accept=".jpg,.jpeg,.png"
                 multiple
-                max={3}
+                max={5}
                 style={{ display: "none" }}
                 ref={fileInputRef}
                 onChange={handleImageChange}

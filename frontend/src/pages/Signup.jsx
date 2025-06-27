@@ -77,6 +77,7 @@ const Signup = () => {
           email: formData.email,
           password: formData.password
         }),
+        credentials: 'include' // This is important for cookies
       });
 
       const data = await response.json();

@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import "../../styles/components/UpdateEntity.css";
 
-function UpdateEntity({ entities, onUpdate, onDelete }) {
+function UpdateEntity({ entities, onDelete }) {
   const { id } = useParams();
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
@@ -10,20 +10,24 @@ function UpdateEntity({ entities, onUpdate, onDelete }) {
     location: "",
     description: "",
     rating: "",
-    image: ""
+    image: "",
+    images: [],
+    imagePreviews: []
   });
   const [error, setError] = useState("");
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
 
   useEffect(() => {
-    const entity = entities.find(e => e.id === id);
+    const entity = entities.find(e => e._id === id || e.id === id);
     if (entity) {
       setFormData({
         name: entity.name,
         location: entity.location,
         description: entity.description,
         rating: entity.rating.toString(),
-        image: entity.image || ""
+        image: entity.image || "",
+        images: entity.images || [],
+        imagePreviews: entity.images?.map(img => img) || []
       });
     } else {
       setError("Place not found");
@@ -38,7 +42,7 @@ function UpdateEntity({ entities, onUpdate, onDelete }) {
     }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     setError("");
 
@@ -55,20 +59,45 @@ function UpdateEntity({ entities, onUpdate, onDelete }) {
       return;
     }
 
-    // Update entity
-    const updatedEntity = {
-      id,
-      ...formData,
-      rating: rating
-    };
+    // Prepare FormData for API
+    const formDataToSend = new FormData();
+    formDataToSend.append("name", formData.name);
+    formDataToSend.append("location", formData.location);
+    formDataToSend.append("description", formData.description);
+    formDataToSend.append("rating", formData.rating);
+    if (formData.category) formDataToSend.append("category", formData.category);
+    if (formData.reportedOn) formDataToSend.append("reportedOn", formData.reportedOn);
+    if (formData.commentsCount) formDataToSend.append("commentsCount", formData.commentsCount);
+    if (formData.images && formData.images.length > 0 && typeof formData.images[0] !== 'string') {
+      formData.images.forEach(file => {
+        formDataToSend.append("images", file);
+      });
+    }
 
-    onUpdate(updatedEntity);
-    navigate("/places");
+    try {
+      const response = await fetch(`http://localhost:5004/api/places/${id}`, {
+        method: "PUT",
+        body: formDataToSend,
+        credentials: "include",
+      });
+      if (!response.ok) throw new Error("Failed to update place");
+      navigate("/places");
+    } catch (err) {
+      setError(err.message);
+    }
   };
 
-  const handleDelete = () => {
-    onDelete(id);
-    navigate("/places");
+  const handleDelete = async () => {
+    try {
+      const response = await fetch(`http://localhost:5004/api/places/${id}`, {
+        method: "DELETE",
+        credentials: "include"
+      });
+      if (!response.ok) throw new Error("Failed to delete place");
+      navigate("/places");
+    } catch (err) {
+      setError(err.message);
+    }
   };
 
   if (error) {
@@ -154,16 +183,35 @@ function UpdateEntity({ entities, onUpdate, onDelete }) {
         </div>
 
         <div className="update-entity__form-group">
-          <label htmlFor="image" className="update-entity__label">Image URL</label>
+          <label className="update-entity__label">Images</label>
+          {Array.isArray(formData.images) && formData.images.length > 0 && formData.images.every(img => typeof img === 'string') && (
+            <div style={{ display: 'flex', gap: '0.5rem', marginBottom: '0.5rem' }}>
+              {formData.images.map((img, idx) => (
+                <img key={idx} src={img} alt={`Current ${idx+1}`} style={{ width: '80px', height: '60px', objectFit: 'cover', borderRadius: '0.5rem', border: '1.5px solid #e2e8f0' }} />
+              ))}
+            </div>
+          )}
           <input
-            type="url"
-            id="image"
-            name="image"
+            type="file"
+            accept=".jpg,.jpeg,.png"
             className="update-entity__input"
-            value={formData.image}
-            onChange={handleChange}
-            placeholder="Enter image URL"
+            multiple
+            onChange={e => {
+              const files = Array.from(e.target.files);
+              setFormData(prev => ({
+                ...prev,
+                images: files,
+                imagePreviews: files.map(file => URL.createObjectURL(file))
+              }));
+            }}
           />
+          {formData.imagePreviews && (
+            <div style={{ display: 'flex', gap: '0.5rem', marginTop: '0.5rem' }}>
+              {formData.imagePreviews.map((src, idx) => (
+                <img key={idx} src={src} alt={`Preview ${idx+1}`} style={{ width: '80px', height: '60px', objectFit: 'cover', borderRadius: '0.5rem', border: '1.5px solid #e2e8f0' }} />
+              ))}
+            </div>
+          )}
         </div>
 
         <div className="update-entity__buttons">

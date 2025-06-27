@@ -45,7 +45,6 @@ function EntityList({ entities }) {
 
   let filteredEntities = safeEntities
     .filter(entity =>
-      (entity.location && entity.location.toLowerCase().includes('india')) &&
       (entity.name && entity.name.toLowerCase().includes(filter.toLowerCase()) ||
       entity.location && entity.location.toLowerCase().includes(filter.toLowerCase())) &&
       (!category || entity.category === category)
@@ -185,15 +184,14 @@ function EntityList({ entities }) {
       <div className="entity-list__stats">
         <div className="entity-list__stat-card">
           <h3>Total Places</h3>
-          <p>{safeEntities.filter(e => e.location && e.location.toLowerCase().includes('india')).length}</p>
+          <p>{safeEntities.length}</p>
         </div>
         <div className="entity-list__stat-card">
           <h3>Average Rating</h3>
           <p>
             {(() => {
-              const indiaEntities = safeEntities.filter(e => e.location && e.location.toLowerCase().includes('india'));
-              return indiaEntities.length > 0 
-                ? (indiaEntities.reduce((acc, curr) => acc + curr.rating, 0) / indiaEntities.length).toFixed(1)
+              return safeEntities.length > 0 
+                ? (safeEntities.reduce((acc, curr) => acc + (curr.rating || 0), 0) / safeEntities.length).toFixed(1)
                 : '0.0';
             })()}
           </p>
